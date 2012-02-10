@@ -1,0 +1,7 @@
+.classpath
+.settings
+.project
+target
+.pmd
+.checkstyle
+.metadata
