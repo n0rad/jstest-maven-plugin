@@ -2,20 +2,29 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>jstest-maven-plugin-sample-coverage</artifactId>
+	<artifactId>jstest-maven-plugin-sample-overlay</artifactId>
 	<packaging>war</packaging>
-	<name>JsTest Maven Plugin - Sample - Coverage</name>
+	<name>JsTest Maven Plugin - Sample - Overlay</name>
 
 	<parent>
 		<groupId>net.awired.jstest</groupId>
-		<artifactId>jstest-maven-plugin-sample</artifactId>
+		<artifactId>jstest-maven-plugin-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<relativePath>../../</relativePath>
 	</parent>
 
 	<properties>
 		<sonar.language>js</sonar.language>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.awired.jstest</groupId>
+			<artifactId>jstest-maven-plugin-sample-coverage</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<sourceDirectory>src/main/webapp/js</sourceDirectory>

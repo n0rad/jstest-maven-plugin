@@ -76,6 +76,11 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     private File coverageReportFile;
 
     /**
+     * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}src"
+     */
+    private File targetSourceDirectory;
+
+    /**
      * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}instrumented"
      */
     private File instrumentedDirectory;
@@ -110,6 +115,14 @@ public abstract class JsTestConfiguration extends AbstractMojo {
 
     public File getInstrumentedDirectory() {
         return instrumentedDirectory;
+    }
+
+    public File getTargetSourceDirectory() {
+        return targetSourceDirectory;
+    }
+
+    public File getSourceDir() {
+        return sourceDir;
     }
 
 }

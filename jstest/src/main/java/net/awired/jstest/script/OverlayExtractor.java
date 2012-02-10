@@ -1,6 +1,7 @@
 package net.awired.jstest.script;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -18,6 +19,7 @@ public class OverlayExtractor {
 
     private final Log log;
     private ArchiverManager archiverManager;
+    private DirectoryCopier directoryCopier = new DirectoryCopier();
 
     public OverlayExtractor(Log log, ArchiverManager archiverManager) {
         this.log = log;
@@ -47,7 +49,12 @@ public class OverlayExtractor {
         // TODO: not sure it's good, we should reuse the markers of the dependency plugin
         if (FileUtils.sizeOfDirectory(overlayOutput) == 0
                 || overlay.getArtifact().getFile().lastModified() > overlayOutput.lastModified()) {
-            doUnpack(overlay.getArtifact().getFile(), overlayOutput);
+            File file = overlay.getArtifact().getFile();
+            if (!file.isFile()) {
+                copyDirectoryArtifact(file, overlayOutput);
+            } else {
+                unpackArchiveArtifact(file, overlayOutput);
+            }
         } else {
             log.debug("Overlay [" + overlay + "] was already unpacked");
         }
@@ -61,18 +68,42 @@ public class OverlayExtractor {
         return new File(rootDirectory, subdir);
     }
 
-    private void doUnpack(File file, File unpackDirectory) throws MojoExecutionException {
-        String archiveExt = FileUtils.getExtension(file.getAbsolutePath()).toLowerCase();
+    private void copyDirectoryArtifact(File dir, File output) {
+        if (!dir.isDirectory()) {
+            log.warn("cannot copy overlay, its not a dir : " + dir);
+            return;
+        }
 
+        // if overlay is in same reactor instead of point to war
+        // we have a link to target/classes
+        File targetOfDependencyDir = new File(dir, "../jstest/src");
+        if (targetOfDependencyDir.isDirectory()) {
+            try {
+                directoryCopier.copyDirectory(targetOfDependencyDir, output);
+            } catch (IOException e) {
+                log.error("error on copying same reactor target directory : " + targetOfDependencyDir, e);
+            }
+        } else {
+            log.warn("Cannot manage overlay of a project in same reactor that is not build with jstest-maven-plugin");
+        }
+    }
+
+    private void unpackArchiveArtifact(File file, File output) throws MojoExecutionException {
+        if (!file.isFile()) {
+            log.warn("cannot extract overlay, its not a file : " + file);
+            return;
+        }
+
+        String archiveExt = FileUtils.getExtension(file.getAbsolutePath()).toLowerCase();
         try {
             UnArchiver unArchiver = archiverManager.getUnArchiver(archiveExt);
             unArchiver.setSourceFile(file);
-            unArchiver.setDestDirectory(unpackDirectory);
+            unArchiver.setDestDirectory(output);
             unArchiver.setOverwrite(true);
             unArchiver.extract();
         } catch (ArchiverException e) {
             throw new MojoExecutionException("Error unpacking file [" + file.getAbsolutePath() + "]" + "to ["
-                    + unpackDirectory.getAbsolutePath() + "]", e);
+                    + output.getAbsolutePath() + "]", e);
         } catch (NoSuchArchiverException e) {
             log.warn("Skip unpacking dependency file [" + file.getAbsolutePath() + " with unknown extension ["
                     + archiveExt + "]");

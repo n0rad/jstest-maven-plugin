@@ -2,10 +2,12 @@ package net.awired.jstest.mojo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import net.awired.jscoverage.instrumentation.JsInstrumentedSource;
 import net.awired.jscoverage.instrumentation.JsInstrumentor;
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
+import net.awired.jstest.script.DirectoryCopier;
 import net.awired.jstest.script.FileUtilsWrapper;
 import net.awired.jstest.script.ScriptDirectory;
 import net.awired.jstest.script.ScriptDirectoryScanner;
@@ -21,9 +23,15 @@ public class ProcessTestSourcesMojo extends AbstractJsTestMojo {
     private ScriptDirectoryScanner scriptDirScanner = new ScriptDirectoryScanner();
     private JsInstrumentor jsInstrumentor = new JsInstrumentor();
     private FileUtilsWrapper fileUtilsWrapper = new FileUtilsWrapper();
+    private DirectoryCopier directoryCopier = new DirectoryCopier();
 
     @Override
     protected void run() throws MojoExecutionException, MojoFailureException {
+        try {
+            directoryCopier.copyDirectory(getSourceDir(), getTargetSourceDirectory());
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot copy source directory to target", e);
+        }
         if (isCoverage()) {
             getLog().info("Instrumentation of javascript sources");
             processInstrumentSources();
