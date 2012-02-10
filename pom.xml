@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.awired.jstest</groupId>
+	<artifactId>jstest-maven-plugin-parent</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>JsTest Maven Plugin - Parent</name>
+
+	<parent>
+		<groupId>net.awired.parent.parent-java</groupId>
+		<artifactId>parent-java</artifactId>
+		<version>1.13</version>
+	</parent>
+
+	<modules>
+		<module>jstest</module>
+<!-- 		<module>sample/coverage</module> -->
+	</modules>
+
+	<scm>
+		<connection>scm:git:git://github.com/awired/jstest-maven-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:awired/jstest-maven-plugin.git</developerConnection>
+		<url>http://github.com/awired/jstest-maven-plugin</url>
+	</scm>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.awired.jstest</groupId>
+				<artifactId>jstest-maven-plugin</artifactId>
+				<version>${project.version}</version>
+				<type>maven-plugin</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
