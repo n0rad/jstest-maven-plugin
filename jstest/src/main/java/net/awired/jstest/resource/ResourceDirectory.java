@@ -1,11 +1,11 @@
-package net.awired.jstest.script;
+package net.awired.jstest.resource;
 
 import static java.util.Arrays.asList;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-public class ScriptDirectory {
+public class ResourceDirectory {
 
     public static final List<String> DEFAULT_INCLUDES = asList("**" + File.separator + "**");
     public static final List<String> DEFAULT_EXCLUDES = Collections.emptyList();
@@ -14,12 +14,11 @@ public class ScriptDirectory {
     private List<String> includes;
     private List<String> excludes;
     private boolean updatable;
-    private int priority;
 
-    public ScriptDirectory() {
+    public ResourceDirectory() {
     }
 
-    public ScriptDirectory(File directory, List<String> sourceIncludes, List<String> sourceExcludes) {
+    public ResourceDirectory(File directory, List<String> sourceIncludes, List<String> sourceExcludes) {
         this.directory = directory;
         this.includes = sourceIncludes;
         this.excludes = sourceExcludes;

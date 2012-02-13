@@ -1,4 +1,4 @@
-package net.awired.jstest.script;
+package net.awired.jstest.common.io;
 
 import java.io.File;
 import java.io.IOException;

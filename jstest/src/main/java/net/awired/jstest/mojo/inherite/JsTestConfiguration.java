@@ -2,7 +2,7 @@ package net.awired.jstest.mojo.inherite;
 
 import java.io.File;
 import java.util.List;
-import net.awired.jstest.script.ScriptDirectory;
+import net.awired.jstest.resource.ResourceDirectory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
 
@@ -16,12 +16,12 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     /**
      * @parameter
      */
-    private List<String> sourceIncludes = ScriptDirectory.DEFAULT_INCLUDES;
+    private List<String> sourceIncludes = ResourceDirectory.DEFAULT_INCLUDES;
 
     /**
      * @parameter
      */
-    private List<String> sourceExcludes = ScriptDirectory.DEFAULT_EXCLUDES;
+    private List<String> sourceExcludes = ResourceDirectory.DEFAULT_EXCLUDES;
 
     /**
      * @parameter default-value="${project.build.testSourceDirectory}" expression="${testDir}"
@@ -31,27 +31,27 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     /**
      * @parameter
      */
-    private List<String> testIncludes = ScriptDirectory.DEFAULT_INCLUDES;
+    private List<String> testIncludes = ResourceDirectory.DEFAULT_INCLUDES;
 
     /**
      * @parameter
      */
-    private List<String> testExcludes = ScriptDirectory.DEFAULT_EXCLUDES;
+    private List<String> testExcludes = ResourceDirectory.DEFAULT_EXCLUDES;
 
     /**
-     * @parameter expression="${overlaydir}"
+     * @parameter expression="${overlaydirs}"
      */
-    private List<File> overlayDirs;
-
-    /**
-     * @parameter
-     */
-    private List<String> overlayIncludes = ScriptDirectory.DEFAULT_INCLUDES;
+    private List<File> preloadOverlayDirs;
 
     /**
      * @parameter
      */
-    private List<String> overlayExcludes = ScriptDirectory.DEFAULT_EXCLUDES;
+    private List<String> overlayIncludes = ResourceDirectory.DEFAULT_INCLUDES;
+
+    /**
+     * @parameter
+     */
+    private List<String> overlayExcludes = ResourceDirectory.DEFAULT_EXCLUDES;
 
     /**
      * @parameter default-value="0" expression="${serverPort}"
@@ -78,7 +78,7 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     /**
      * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}src"
      */
-    private File targetSourceDirectory;
+    private File targetSrcDir;
 
     /**
      * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}instrumented"
@@ -97,8 +97,34 @@ public abstract class JsTestConfiguration extends AbstractMojo {
 
     //////////////////////////////////////////////////////////
 
-    public ScriptDirectory getSourceScriptDirectory() {
-        return new ScriptDirectory(sourceDir, sourceIncludes, sourceExcludes);
+    private ResourceDirectory buildInstrumentedSrcResourceDirectory() {
+        return new ResourceDirectory(targetSrcDir, sourceIncludes, sourceExcludes);
+    }
+
+    private ResourceDirectory buildTargetSrcResourceDirectory() {
+        return new ResourceDirectory(targetSrcDir, sourceIncludes, sourceExcludes);
+    }
+
+    public ResourceDirectory buildSrcResourceDirectory() {
+        ResourceDirectory resourceDirectory = new ResourceDirectory(sourceDir, sourceIncludes, sourceExcludes);
+        resourceDirectory.setUpdatable(true);
+        return resourceDirectory;
+    }
+
+    public ResourceDirectory buildCurrentSrcDir(boolean serverMode) {
+        if (serverMode) {
+            return buildSrcResourceDirectory();
+        } else if (isCoverage()) {
+            return buildInstrumentedSrcResourceDirectory();
+        } else {
+            return buildTargetSrcResourceDirectory();
+        }
+    }
+
+    public ResourceDirectory buildTestResourceDirectory() {
+        ResourceDirectory resourceDirectory = new ResourceDirectory(testDir, testIncludes, testExcludes);
+        resourceDirectory.setUpdatable(true);
+        return resourceDirectory;
     }
 
     public File getOverlayDirectory() {
@@ -118,7 +144,7 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     }
 
     public File getTargetSourceDirectory() {
-        return targetSourceDirectory;
+        return targetSrcDir;
     }
 
     public File getSourceDir() {

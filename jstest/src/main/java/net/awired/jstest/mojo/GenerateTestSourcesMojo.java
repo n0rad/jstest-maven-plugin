@@ -1,7 +1,7 @@
 package net.awired.jstest.mojo;
 
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
-import net.awired.jstest.script.OverlayExtractor;
+import net.awired.jstest.resource.OverlayExtractor;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.eclipse.jetty.util.log.Log;

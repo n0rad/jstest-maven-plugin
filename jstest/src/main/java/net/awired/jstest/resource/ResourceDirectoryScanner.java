@@ -1,4 +1,4 @@
-package net.awired.jstest.script;
+package net.awired.jstest.resource;
 
 import static java.util.Arrays.asList;
 import java.io.File;
@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Set;
 import org.codehaus.plexus.util.DirectoryScanner;
 
-public class ScriptDirectoryScanner {
+public class ResourceDirectoryScanner {
 
     private DirectoryScanner directoryScanner = new DirectoryScanner();
 
-    public List<String> scan(ScriptDirectory scriptDirectory) {
+    public List<String> scan(ResourceDirectory scriptDirectory) {
         Set<String> set = new LinkedHashSet<String>();
         for (String include : scriptDirectory.getIncludes()) {
             set.addAll(performScan(scriptDirectory.getDirectory(), include, scriptDirectory.getExcludes()));

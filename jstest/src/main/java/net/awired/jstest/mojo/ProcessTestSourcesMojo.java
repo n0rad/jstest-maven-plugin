@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.List;
 import net.awired.jscoverage.instrumentation.JsInstrumentedSource;
 import net.awired.jscoverage.instrumentation.JsInstrumentor;
+import net.awired.jstest.common.io.DirectoryCopier;
+import net.awired.jstest.common.io.FileUtilsWrapper;
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
-import net.awired.jstest.script.DirectoryCopier;
-import net.awired.jstest.script.FileUtilsWrapper;
-import net.awired.jstest.script.ScriptDirectory;
-import net.awired.jstest.script.ScriptDirectoryScanner;
+import net.awired.jstest.resource.ResourceDirectory;
+import net.awired.jstest.resource.ResourceDirectoryScanner;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -20,7 +20,7 @@ import org.apache.maven.plugin.MojoFailureException;
  */
 public class ProcessTestSourcesMojo extends AbstractJsTestMojo {
 
-    private ScriptDirectoryScanner scriptDirScanner = new ScriptDirectoryScanner();
+    private ResourceDirectoryScanner scriptDirScanner = new ResourceDirectoryScanner();
     private JsInstrumentor jsInstrumentor = new JsInstrumentor();
     private FileUtilsWrapper fileUtilsWrapper = new FileUtilsWrapper();
     private DirectoryCopier directoryCopier = new DirectoryCopier();
@@ -40,7 +40,7 @@ public class ProcessTestSourcesMojo extends AbstractJsTestMojo {
 
     private void processInstrumentSources() {
         if (isCoverage()) {
-            ScriptDirectory sourceScriptDirectory = getSourceScriptDirectory();
+            ResourceDirectory sourceScriptDirectory = buildSrcResourceDirectory();
             List<String> scan = scriptDirScanner.scan(sourceScriptDirectory);
             for (String file : scan) {
                 try {

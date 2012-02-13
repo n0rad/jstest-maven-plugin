@@ -1,6 +1,10 @@
 package net.awired.jstest.mojo.inherite;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import net.awired.jstest.common.StringStacktrace;
+import net.awired.jstest.resource.ResourceDirectory;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
@@ -28,4 +32,19 @@ public abstract class AbstractJsTestMojo extends JsTestConfiguration {
         }
     }
 
+    public List<ResourceDirectory> buildOverlaysResourceDirectories() {
+        List<ResourceDirectory> overlays = new ArrayList<ResourceDirectory>();
+        File overlayDirectory = getOverlayDirectory();
+        File[] groupIdDirs = overlayDirectory.listFiles();
+        if (groupIdDirs != null) {
+            for (File groupIdDir : groupIdDirs) {
+                File[] artifactIdDirs = groupIdDir.listFiles();
+                for (File resource : artifactIdDirs) {
+                    overlays.add(new ResourceDirectory(resource, ResourceDirectory.DEFAULT_INCLUDES,
+                            ResourceDirectory.DEFAULT_EXCLUDES));
+                }
+            }
+        }
+        return overlays;
+    }
 }

@@ -1,9 +1,10 @@
-package net.awired.jstest.script;
+package net.awired.jstest.resource;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import net.awired.jstest.common.io.DirectoryCopier;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.war.Overlay;

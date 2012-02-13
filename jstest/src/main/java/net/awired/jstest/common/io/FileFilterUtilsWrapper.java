@@ -1,4 +1,4 @@
-package net.awired.jstest.script;
+package net.awired.jstest.common.io;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
