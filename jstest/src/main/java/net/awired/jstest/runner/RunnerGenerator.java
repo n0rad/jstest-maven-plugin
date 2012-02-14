@@ -33,21 +33,17 @@ public class RunnerGenerator {
 
     public void replaceTemplateVars(StringTemplate template, TestType testType, ResourceResolver resolver) {
         template.setAttribute("testResources", buildTestResources(testType, resolver));
-        template.setAttribute("sources", buildSources(resolver));
-        template.setAttribute("tests", buildTests(resolver));
+        template.setAttribute("sources", htmlResourceTranformer.buildSources(resolver));
+        template.setAttribute("tests", htmlResourceTranformer.buildTests(resolver));
     }
 
     private String buildTestResources(TestType testType, ResourceResolver resolver) {
         StringBuilder res = new StringBuilder();
-        for (String resource : testType.getTesterResources()) {
-            appendSourceTag(res, resolver.getResource(ResourceResolver.SRC_RESOURCE_PREFIX + resource));
-        }
-        appendSourceTag(
-                res,
-                getClass().getResourceAsStream(
-                        RunnerResourceHandler.RUNNER_RESOURCE_PATH + testType.getTesterManager()),
-                testType.getTesterManager());
-        appendSourceTag(res, getClass().getResourceAsStream(JsInstrumentor.JSCOV_FILE), JsInstrumentor.JSCOV_FILE);
+        htmlResourceTranformer.appendTag(res,
+                RunnerResourceHandler.RUNNER_RESOURCE_PATH + JsInstrumentor.JSCOV_FILE.substring(1));
+        htmlResourceTranformer.appendTag(res,
+                RunnerResourceHandler.RUNNER_RESOURCE_PATH + testType.getTesterManager());
+
         return res.toString();
     }
 

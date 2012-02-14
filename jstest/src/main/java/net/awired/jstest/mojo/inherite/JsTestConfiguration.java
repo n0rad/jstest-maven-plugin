@@ -134,7 +134,7 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     }
 
     private ResourceDirectory buildInstrumentedSrcResourceDirectory() {
-        return new ResourceDirectory(targetSrcDir, sourceIncludes, sourceExcludes);
+        return new ResourceDirectory(instrumentedDirectory, sourceIncludes, sourceExcludes);
     }
 
     private ResourceDirectory buildTargetSrcResourceDirectory() {

@@ -85,7 +85,7 @@ public class ResourceResolver {
     public Map<String, File> FilterSourcesKeys() {
         return Maps.filterKeys(resources, new Predicate<String>() {
             public boolean apply(String input) {
-                return input.startsWith(SRC_RESOURCE_PREFIX) && !input.contains("jasmine");
+                return input.startsWith(SRC_RESOURCE_PREFIX);
             }
         });
     }

@@ -1,6 +1,7 @@
 package net.awired.jstest.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +31,11 @@ public class RunnerResourceHandler {
         response.setContentType(contentType + ";charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
-        ByteStreams.copy(getClass().getResourceAsStream(target), response.getOutputStream());
+        InputStream resourceAsStream = getClass().getResourceAsStream(target);
+        if (resourceAsStream == null) {
+            resourceAsStream = getClass().getResourceAsStream(target.substring(RUNNER_RESOURCE_PATH.length() - 1));
+        }
+        ByteStreams.copy(resourceAsStream, response.getOutputStream());
 
     }
 
