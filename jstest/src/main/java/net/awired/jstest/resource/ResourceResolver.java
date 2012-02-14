@@ -5,17 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.maven.plugin.logging.Log;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
 
 public class ResourceResolver {
 
     public static final String SRC_RESOURCE_PREFIX = "/src/";
     public static final String TEST_RESOURCE_PREFIX = "/test/";
+
     private ResourceDirectoryScanner directoryScanner = new ResourceDirectoryScanner();
 
     private final Log log;
     private final ResourceDirectory source;
     private final ResourceDirectory test;
-    private final List<ResourceDirectory> overlays;
+    private final List<ResourceDirectory> sourceOverlays;
     private final List<ResourceDirectory> preloadOverlayDirs;
 
     private final Map<String, File> resources = new HashMap<String, File>();
@@ -25,11 +28,9 @@ public class ResourceResolver {
         this.log = log;
         this.source = source;
         this.test = test;
-        this.overlays = overlays;
+        this.sourceOverlays = overlays;
         this.preloadOverlayDirs = preloadOverlayDirs;
 
-        registerResourcesToMap(SRC_RESOURCE_PREFIX, directoryScanner.scan(source), source.getDirectory(), true);
-        registerResourcesToMap(TEST_RESOURCE_PREFIX, directoryScanner.scan(test), test.getDirectory(), true);
         for (ResourceDirectory overlay : overlays) {
             registerResourcesToMap(SRC_RESOURCE_PREFIX, directoryScanner.scan(overlay), overlay.getDirectory(), true);
         }
@@ -37,6 +38,8 @@ public class ResourceResolver {
             registerResourcesToMap(SRC_RESOURCE_PREFIX, directoryScanner.scan(overlayPreload),
                     overlayPreload.getDirectory(), false);
         }
+        registerResourcesToMap(TEST_RESOURCE_PREFIX, directoryScanner.scan(test), test.getDirectory(), true);
+        registerResourcesToMap(SRC_RESOURCE_PREFIX, directoryScanner.scan(source), source.getDirectory(), true);
 
         if (log.isDebugEnabled()) {
             log.debug("Resources resolved by the server : ");
@@ -59,7 +62,7 @@ public class ResourceResolver {
         }
     }
 
-    public File getScript(String path) {
+    public File getResource(String path) {
         return resources.get(path);
     }
 
@@ -77,5 +80,21 @@ public class ResourceResolver {
             registerResourcesToMap(SRC_RESOURCE_PREFIX, directoryScanner.scan(overlayPreload),
                     overlayPreload.getDirectory(), false);
         }
+    }
+
+    public Map<String, File> FilterSourcesKeys() {
+        return Maps.filterKeys(resources, new Predicate<String>() {
+            public boolean apply(String input) {
+                return input.startsWith(SRC_RESOURCE_PREFIX) && !input.contains("jasmine");
+            }
+        });
+    }
+
+    public Map<String, File> FilterTestsKeys() {
+        return Maps.filterKeys(resources, new Predicate<String>() {
+            public boolean apply(String input) {
+                return input.startsWith(TEST_RESOURCE_PREFIX);
+            }
+        });
     }
 }

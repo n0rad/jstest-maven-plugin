@@ -3,6 +3,8 @@ package net.awired.jstest.mojo.inherite;
 import java.io.File;
 import java.util.List;
 import net.awired.jstest.resource.ResourceDirectory;
+import net.awired.jstest.runner.AmdRunnerType;
+import net.awired.jstest.runner.TestType;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
 
@@ -63,6 +65,26 @@ public abstract class JsTestConfiguration extends AbstractMojo {
      */
     private boolean coverage;
 
+    /**
+     * @parameter expression="${amdType}"
+     */
+    private AmdRunnerType runnerType = AmdRunnerType.NONE;
+
+    /**
+     * @parameter expression="${testType}"
+     */
+    private TestType testType = TestType.JASMINE;
+
+    /**
+     * @parameter expression="${runnerTemplate}"
+     */
+    private String runnerTemplate;
+
+    /**
+     * @parameter expression="${runnerAmdFile}"
+     */
+    private String runnerAmdFile;
+
     ///////////////////////////////////////////////////:
 
     /**
@@ -96,6 +118,20 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     private MavenProject mavenProject;
 
     //////////////////////////////////////////////////////////
+
+    public AmdRunnerType buildAmdRunnerType() {
+        if (runnerAmdFile != null) {
+            this.runnerType.setAmdFile(runnerAmdFile);
+        }
+        if (runnerTemplate != null) {
+            this.runnerType.setTemplate(runnerTemplate);
+        }
+        return this.runnerType;
+    }
+
+    public TestType buildTestType() {
+        return testType;
+    }
 
     private ResourceDirectory buildInstrumentedSrcResourceDirectory() {
         return new ResourceDirectory(targetSrcDir, sourceIncludes, sourceExcludes);
@@ -149,6 +185,10 @@ public abstract class JsTestConfiguration extends AbstractMojo {
 
     public File getSourceDir() {
         return sourceDir;
+    }
+
+    public int getServerPort() {
+        return serverPort;
     }
 
 }

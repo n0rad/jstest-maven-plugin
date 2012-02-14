@@ -1,4 +1,4 @@
-package net.awired.jstest.resource;
+package net.awired.jstest.resource.overlay;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,6 @@ import net.awired.jstest.common.io.DirectoryCopier;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.war.Overlay;
-import org.apache.maven.plugin.war.overlay.OverlayManager;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
@@ -31,8 +30,8 @@ public class OverlayExtractor {
         try {
             List<Overlay> overlays = new ArrayList<Overlay>();
             final Overlay currentProjectOverlay = Overlay.createInstance();
-            final OverlayManager overlayManager = new OverlayManager(overlays, mavenProject, "**/**", "META-INF/**",
-                    currentProjectOverlay);
+            final TestOverlayManager overlayManager = new TestOverlayManager(overlays, mavenProject, "**/**",
+                    "META-INF/**", currentProjectOverlay);
             final List<Overlay> resolvedOverlays = overlayManager.getOverlays();
             for (Overlay overlay2 : resolvedOverlays) {
                 if (!overlay2.isCurrentProject()) {

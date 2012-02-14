@@ -24,10 +24,16 @@ public class ResourceHandler {
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        File file = resourceResolver.getScript(target);
+        File file = resourceResolver.getResource(target);
         if (file != null) {
             log.debug("Serve resource : " + target + " to target file :" + file);
-            response.setContentType("text/html;charset=utf-8");
+            String contentType = "text/html";
+            if (target.endsWith(".js")) {
+                contentType = "application/javascript";
+            } else if (target.endsWith(".css")) {
+                contentType = "text/css";
+            }
+            response.setContentType(contentType + ";charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
             baseRequest.setHandled(true);
             ByteStreams.copy(new FileInputStream(file), response.getOutputStream());

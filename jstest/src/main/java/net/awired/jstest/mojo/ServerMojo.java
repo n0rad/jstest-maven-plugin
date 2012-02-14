@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
 import net.awired.jstest.resource.ResourceDirectory;
 import net.awired.jstest.resource.ResourceResolver;
-import net.awired.jstest.server.JsTestServer;
 import net.awired.jstest.server.JsTestHandler;
+import net.awired.jstest.server.JsTestServer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -28,12 +28,13 @@ public class ServerMojo extends AbstractJsTestMojo {
 
     @Override
     public void run() throws MojoExecutionException, MojoFailureException {
-        JsTestServer jsTestServer = new JsTestServer(getLog());
+        JsTestServer jsTestServer = new JsTestServer(getLog(), getServerPort());
         try {
             ResourceResolver scriptResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(true),
                     buildTestResourceDirectory(), buildOverlaysResourceDirectories(),
                     new ArrayList<ResourceDirectory>());
-            jsTestServer.startServer(new JsTestHandler(getLog(), scriptResolver));
+            jsTestServer.startServer(new JsTestHandler(getLog(), scriptResolver, buildAmdRunnerType(),
+                    buildTestType()));
             getLog().info(INSTRUCTION_FORMAT);
             jsTestServer.join();
         } catch (Exception e) {

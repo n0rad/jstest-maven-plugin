@@ -2,13 +2,12 @@ package net.awired.jstest.resource;
 
 import static java.util.Arrays.asList;
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 public class ResourceDirectory {
 
-    public static final List<String> DEFAULT_INCLUDES = asList("**" + File.separator + "**");
-    public static final List<String> DEFAULT_EXCLUDES = Collections.emptyList();
+    public static final List<String> DEFAULT_INCLUDES = asList("**/**");
+    public static final List<String> DEFAULT_EXCLUDES = asList("META-INF/**", "WEB-INF/**");
 
     private File directory;
     private List<String> includes;

@@ -10,25 +10,23 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 
 public class JsTestServer {
     private static final int MIN_PORT = 10000;
-    private static final int MAX_PORT = 65534;
+    private static final int MAX_PORT = 65535;
 
     private final Log log;
 
     private Server server = new Server();
     private int port;
 
-    public JsTestServer(Log log) {
-        this.log = log;
-        int tmpPort;
-        do {
-            tmpPort = MIN_PORT + (int) (Math.random() * ((MAX_PORT - MIN_PORT) + 1));
-        } while (!available(tmpPort));
-        this.port = tmpPort;
-    }
-
     public JsTestServer(Log log, int port) {
         this.log = log;
         this.port = port;
+        if (port <= 0 || port >= 65535) {
+            int tmpPort;
+            do {
+                tmpPort = MIN_PORT + (int) (Math.random() * ((MAX_PORT - MIN_PORT) + 1));
+            } while (!available(tmpPort));
+            this.port = tmpPort;
+        }
     }
 
     public void startServer(Handler handler) throws Exception {
@@ -51,7 +49,14 @@ public class JsTestServer {
     }
 
     public void close() {
-        server.destroy();
+        if (server.isRunning()) {
+            try {
+                server.stop();
+            } catch (Exception e) {
+                // nothing to do
+            }
+            server.destroy();
+        }
     }
 
     public static boolean available(int port) {
