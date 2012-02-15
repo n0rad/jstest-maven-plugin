@@ -2,15 +2,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>jstest-maven-plugin-sample-overlay</artifactId>
+	<artifactId>jstest-maven-plugin-sample-curl</artifactId>
 	<packaging>war</packaging>
-	<name>JsTest Maven Plugin - Sample - Overlay</name>
+	<name>JsTest Maven Plugin - Sample - Curl</name>
 
 	<parent>
 		<groupId>net.awired.jstest</groupId>
-		<artifactId>jstest-maven-plugin-parent</artifactId>
+		<artifactId>jstest-maven-plugin-sample</artifactId>
 		<version>0.1-SNAPSHOT</version>
-		<relativePath>../../</relativePath>
+		<relativePath>../</relativePath>
 	</parent>
 
 	<properties>
@@ -19,16 +19,23 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.awired.jstest</groupId>
-			<artifactId>jstest-maven-plugin-sample-coverage</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<groupId>net.awired.js</groupId>
+			<artifactId>curl</artifactId>
+			<version>0.5.4</version>
 			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.js</groupId>
+			<artifactId>jasmine</artifactId>
+			<version>1.1.0</version>
+			<type>war</type>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/main/webapp/js</sourceDirectory>
-		<testSourceDirectory>src/test/webapp/js</testSourceDirectory>
+		<sourceDirectory>src/main/webapp</sourceDirectory>
+		<testSourceDirectory>src/test/webapp</testSourceDirectory>
 
 		<finalName>sample-app</finalName>
 		<plugins>
@@ -44,6 +51,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<runnerType>CURL</runnerType>
 					<serverPort>8235</serverPort>
 					<coverage>true</coverage>
 				</configuration>

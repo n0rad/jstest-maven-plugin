@@ -2,23 +2,12 @@ package net.awired.jstest.runner;
 
 import java.io.File;
 import java.util.Map;
-import net.awired.jstest.resource.ResourceResolver;
 
 public class HtmlResourceTranformer {
 
-    public String buildTests(ResourceResolver resolver) {
+    public String buildTagsFromResources(Map<String, File> resources) {
         StringBuilder res = new StringBuilder();
-        Map<String, File> filterSourcesKeys = resolver.FilterTestsKeys();
-        for (String key : filterSourcesKeys.keySet()) {
-            appendTag(res, key);
-        }
-        return res.toString();
-    }
-
-    public String buildSources(ResourceResolver resolver) {
-        StringBuilder res = new StringBuilder();
-        Map<String, File> filterSourcesKeys = resolver.FilterSourcesKeys();
-        for (String key : filterSourcesKeys.keySet()) {
+        for (String key : resources.keySet()) {
             appendTag(res, key);
         }
         return res.toString();

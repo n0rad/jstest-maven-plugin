@@ -2,16 +2,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Jasmine Spec Runner</title>
+	<title>JsTest Runner</title>
 	$cssDependencies$
 	$javascriptDependencies$
 	<script type="text/javascript" src="$requirejsPath$"></script>
 </head>
 <body>
 	<script type="text/javascript">
-		if(window.location.href.indexOf("ManualSpecRunner.html") !== -1) {
-			document.body.appendChild(document.createTextNode("Warning: opening this HTML file directly from the file system is deprecated. You should instead try running `mvn jasmine:bdd` from the command line, and then visit `http://localhost:8234` in your browser. "))
-		}
 
 		var specs = $specs$;
 

@@ -3,7 +3,7 @@ package net.awired.jstest.mojo.inherite;
 import java.io.File;
 import java.util.List;
 import net.awired.jstest.resource.ResourceDirectory;
-import net.awired.jstest.runner.AmdRunnerType;
+import net.awired.jstest.runner.RunnerType;
 import net.awired.jstest.runner.TestType;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
@@ -68,7 +68,7 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     /**
      * @parameter expression="${amdType}"
      */
-    private AmdRunnerType runnerType = AmdRunnerType.NONE;
+    private RunnerType runnerType = RunnerType.DEFAULT;
 
     /**
      * @parameter expression="${testType}"
@@ -119,7 +119,7 @@ public abstract class JsTestConfiguration extends AbstractMojo {
 
     //////////////////////////////////////////////////////////
 
-    public AmdRunnerType buildAmdRunnerType() {
+    public RunnerType buildAmdRunnerType() {
         if (runnerAmdFile != null) {
             this.runnerType.setAmdFile(runnerAmdFile);
         }

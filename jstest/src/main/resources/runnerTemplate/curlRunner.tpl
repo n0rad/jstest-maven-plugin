@@ -3,35 +3,17 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>JsTest Runner</title>
-	$cssDependencies$
-	$javascriptDependencies$
-	<script type="text/javascript">curl = {baseUrl: ''};</script>
-	<script type="text/javascript" src="$requirejsPath$"></script>
+	<script type="text/javascript">curl = {baseUrl: 'src', paths : {test : 'test'}};</script>
+
+	$testResources$
+
 </head>
 <body>
 	<script type="text/javascript">
-		if(window.location.href.indexOf("ManualSpecRunner.html") !== -1) {
-			document.body.appendChild(document.createTextNode("Warning: opening this HTML file directly from the file system is deprecated. You should instead try running `mvn jasmine:bdd` from the command line, and then visit `http://localhost:8234` in your browser. "))
-		}
 		var require = curl; 
-
-		var specs = $specs$;
-
-/*
-		require.config({
-		    baseUrl: '$sourceDir$'
-		    $if(priority)$
-		    , priority: $priority$
-		    $endif$
-		    $if(customRunnerConfiguration)$
-		    , $customRunnerConfiguration$
-		    $endif$
-        });*/
-        
-
-		require(specs, function() {
-		    window.reporter = new jasmine.$reporter$(); jasmine.getEnv().addReporter(reporter);
-			jasmine.getEnv().execute();
+		var tests = $testsJsArray$;
+		require(tests, function() {
+			testManager.run();
 		});
 	</script>
 </body>

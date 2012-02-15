@@ -16,6 +16,7 @@
 	<modules>
 		<module>coverage</module>
 		<module>overlay</module>
+		<module>curl</module>
 	</modules>
 
 	<dependencyManagement>
