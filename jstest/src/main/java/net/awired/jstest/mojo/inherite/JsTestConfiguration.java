@@ -98,6 +98,11 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     private File coverageReportFile;
 
     /**
+     * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}TEST-jstest.xml"
+     */
+    private File resultReportFile;
+
+    /**
      * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}src"
      */
     private File targetSrcDir;
@@ -189,6 +194,14 @@ public abstract class JsTestConfiguration extends AbstractMojo {
 
     public int getServerPort() {
         return serverPort;
+    }
+
+    public File getCoverageReportFile() {
+        return coverageReportFile;
+    }
+
+    public File getResultReportFile() {
+        return resultReportFile;
     }
 
 }

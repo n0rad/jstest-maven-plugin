@@ -13,6 +13,7 @@
 		var require = curl; 
 		var tests = $testsJsArray$;
 		require(tests, function() {
+			var testManager = new TestManager($serverMode$);
 			testManager.run();
 		});
 	</script>

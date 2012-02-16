@@ -23,14 +23,15 @@ public class JsTestHandler extends AbstractHandler {
     private final RunnerType runnerType;
     private final TestType testType;
 
-    public JsTestHandler(Log log, ResourceResolver resolver, RunnerType runnerType, TestType testType) {
+    public JsTestHandler(Log log, ResourceResolver resolver, RunnerType runnerType, TestType testType,
+            boolean serverMode) {
         this.log = log;
         this.resourceResolver = resolver;
         this.runnerType = runnerType;
         this.testType = testType;
         this.runnerHandler = new RunnerResourceHandler(log);
         this.resourceHandler = new ResourceHandler(log, resolver);
-        this.runnerGenerator = runnerType.buildRunner(testType, resolver);
+        this.runnerGenerator = runnerType.buildRunner(testType, resolver, serverMode);
     }
 
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)

@@ -12,6 +12,8 @@
 <body>
 	<script type="text/javascript">
 		
+		var testManager = new TestManager($serverMode$);
+		
 		if (window.addEventListener) {
 			addEventListener('DOMContentLoaded', testManager.run, false);
 		} else {

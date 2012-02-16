@@ -32,6 +32,10 @@ public class ResourceHandler {
                 contentType = "application/javascript";
             } else if (target.endsWith(".css")) {
                 contentType = "text/css";
+            } else if (target.endsWith(".png")) {
+                contentType = " image/png";
+            } else if (target.endsWith(".gif")) {
+                contentType = " image/gif";
             }
             response.setContentType(contentType + ";charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);

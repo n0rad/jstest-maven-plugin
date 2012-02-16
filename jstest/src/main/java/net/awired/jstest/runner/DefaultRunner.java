@@ -16,6 +16,7 @@ public class DefaultRunner extends Runner {
         template.setAttribute("testResources", buildTestResources(resolver));
         template.setAttribute("sources", htmlResourceTranformer.buildTagsFromResources(resolver.FilterSourcesKeys()));
         template.setAttribute("tests", htmlResourceTranformer.buildTagsFromResources(resolver.FilterTestsKeys()));
+        template.setAttribute("serverMode", serverMode ? "true" : "false");
     }
 
     private String buildTestResources(ResourceResolver resolver) {

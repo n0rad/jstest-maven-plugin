@@ -15,6 +15,7 @@ public abstract class Runner {
     protected ResourceResolver resolver;
     protected final RunnerType runnerType;
     protected TestType testType;
+    protected boolean serverMode;
 
     protected Runner(RunnerType runnerType) {
         this.runnerType = runnerType;
@@ -58,6 +59,14 @@ public abstract class Runner {
 
     public RunnerType getRunnerType() {
         return runnerType;
+    }
+
+    public boolean isServerMode() {
+        return serverMode;
+    }
+
+    public void setServerMode(boolean serverMode) {
+        this.serverMode = serverMode;
     }
 
 }

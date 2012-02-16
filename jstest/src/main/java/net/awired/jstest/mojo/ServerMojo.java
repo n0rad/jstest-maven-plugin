@@ -34,7 +34,7 @@ public class ServerMojo extends AbstractJsTestMojo {
                     buildTestResourceDirectory(), buildOverlaysResourceDirectories(),
                     new ArrayList<ResourceDirectory>());
             jsTestServer.startServer(new JsTestHandler(getLog(), scriptResolver, buildAmdRunnerType(),
-                    buildTestType()));
+                    buildTestType(), true));
             getLog().info(INSTRUCTION_FORMAT);
             jsTestServer.join();
         } catch (Exception e) {

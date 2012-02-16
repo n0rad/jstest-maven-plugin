@@ -21,6 +21,7 @@ public class CurlRunner extends Runner {
     public void replaceTemplateVars(StringTemplate template) {
         template.setAttribute("testResources", buildTestResources(resolver));
         template.setAttribute("testsJsArray", buildTestsJsArray());
+        template.setAttribute("serverMode", serverMode ? "true" : "false");
     }
 
     private String buildTestResources(ResourceResolver resolver) {
@@ -31,6 +32,7 @@ public class CurlRunner extends Runner {
         for (String testerResource : testType.getTesterResources()) {
             htmlResourceTranformer.appendTag(res, ResourceResolver.SRC_RESOURCE_PREFIX + testerResource);
         }
+        //        htmlResourceTranformer.appendTag(res, ResourceResolver.SRC_RESOURCE_PREFIX + "build/firebug-lite.js");
         htmlResourceTranformer.appendTag(res,
                 RunnerResourceHandler.RUNNER_RESOURCE_PATH + testType.getTesterManager());
         htmlResourceTranformer.appendTag(res,

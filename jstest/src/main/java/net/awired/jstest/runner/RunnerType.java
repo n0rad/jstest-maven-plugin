@@ -41,13 +41,13 @@ public enum RunnerType {
         return template;
     }
 
-    public Runner buildRunner(TestType testType, ResourceResolver resolver) {
-        Runner newInstance;
+    public Runner buildRunner(TestType testType, ResourceResolver resolver, boolean serverMode) {
         try {
-            newInstance = runnerClass.newInstance();
-            newInstance.setTestType(testType);
-            newInstance.setResolver(resolver);
-            return newInstance;
+            Runner runner = runnerClass.newInstance();
+            runner.setTestType(testType);
+            runner.setResolver(resolver);
+            runner.setServerMode(serverMode);
+            return runner;
         } catch (Exception e) {
             throw new RuntimeException("Cannot instanciate runner", e);
         }
