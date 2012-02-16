@@ -15,23 +15,28 @@ var TestManager = (function() {
 		document.head.appendChild(link);
 	}
 
-	var Report = function() {
-
-	};
-	Report.prototype = new jasmine.TrivialReporter();
-	Report.prototype.reportRunnerResults = function(runner) {
-		jasmine.TrivialReporter.prototype.reportRunnerResults
-				.call(this, runner);
-		var results = runner.results();
-		var newFavicon = (results.failedCount > 0) ? "favicon-fail.ico"
-				: "favicon-success.ico";
-		changeFavicon(newFavicon);
-	}
 
 	return function(isServerMode) {
 		this.serverMode = isServerMode;
 
 		this.run = function() {
+
+			var Report = function() {
+
+			};
+			Report.prototype = new jasmine.TrivialReporter();
+			Report.prototype.reportRunnerResults = function(runner) {
+				jasmine.TrivialReporter.prototype.reportRunnerResults
+						.call(this, runner);
+				var results = runner.results();
+				var newFavicon = (results.failedCount > 0) ? "favicon-fail.ico"
+						: "favicon-success.ico";
+				changeFavicon(newFavicon);
+			}
+
+			
+			
+			
 			if (!this.serverMode) {
 				window.reporter = new jasmine.JsApiReporter();
 			} else {
