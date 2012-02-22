@@ -9,6 +9,7 @@ import net.awired.jstest.resource.ResourceResolver;
 import net.awired.jstest.server.RunnerResourceHandler;
 import org.antlr.stringtemplate.StringTemplate;
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 public class CurlRunner extends Runner {
@@ -44,15 +45,22 @@ public class CurlRunner extends Runner {
         Map<String, File> filterSourcesKeys = resolver.FilterTestsKeys();
         try {
             Set<String> keySet = filterSourcesKeys.keySet();
-            Collection<String> transform = Collections2.transform(keySet, new Function<String, String>() {
+
+            Function<String, String> jsSourceNameToAmdModuleName = new Function<String, String>() {
                 public String apply(String input) {
-                    if (input.endsWith(".js")) {
-                        return input.substring(0, input.length() - 3);
-                    }
-                    return input;
+                    return input.substring(0, input.length() - 3);
                 }
-            });
-            return mapper.writeValueAsString(transform);
+            };
+
+            Predicate<String> filterJsFiles = new Predicate<String>() {
+                public boolean apply(String input) {
+                    return input.toLowerCase().endsWith(".js");
+                }
+            };
+
+            Collection<String> amdModules = Collections2.transform(Collections2.filter(keySet, filterJsFiles),
+                    jsSourceNameToAmdModuleName);
+            return mapper.writeValueAsString(amdModules);
         } catch (Exception e) {
             throw new RuntimeException("Cannot build testsJsArray", e);
         }

@@ -28,6 +28,10 @@ public class TestMojo extends AbstractJsTestMojo {
 
     @Override
     public void run() throws MojoExecutionException, MojoFailureException {
+        if (isSkipTests()) {
+            getLog().info("Skipping JsTest");
+            return;
+        }
         JsTestServer jsTestServer = new JsTestServer(getLog(), getServerPort());
         try {
             ResourceResolver scriptResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(false),

@@ -85,7 +85,22 @@ public abstract class JsTestConfiguration extends AbstractMojo {
      */
     private String runnerAmdFile;
 
-    ///////////////////////////////////////////////////:
+    /**
+     * @parameter expression="${skipTests}"
+     */
+    private boolean skipTests;
+
+    /**
+     * @parameter default-value="false" expression="${maven.test.skip}"
+     */
+    private boolean mavenTestSkip;
+
+    /**
+     * @parameter default-value="false" expression="${maven.test.failure.ignore}"
+     */
+    private boolean mavenTestFailureIgnore;
+
+    ///////////////////////////////////////////////////
 
     /**
      * @parameter default-value="${project.build.directory}${file.separator}jstest"
@@ -123,6 +138,14 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     private MavenProject mavenProject;
 
     //////////////////////////////////////////////////////////
+
+    public boolean isSkipTests() {
+        return skipTests || mavenTestSkip;
+    }
+
+    public boolean isSkipTestsCompile() {
+        return mavenTestSkip;
+    }
 
     public RunnerType buildAmdRunnerType() {
         if (runnerAmdFile != null) {

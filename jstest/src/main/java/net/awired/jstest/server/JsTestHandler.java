@@ -38,6 +38,8 @@ public class JsTestHandler extends AbstractHandler {
             throws IOException, ServletException {
         try {
             response.addDateHeader("EXPIRES", 0L);
+            response.addHeader("CACHE_CONTROL", "NO_CACHE");
+            response.addHeader("PARAGMA", "NO CACHE");
             if (target.startsWith("/favicon")) {
                 faviconHandler.handle(target, baseRequest, request, response);
                 return;

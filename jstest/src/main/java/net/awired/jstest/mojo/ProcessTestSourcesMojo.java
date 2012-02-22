@@ -27,6 +27,10 @@ public class ProcessTestSourcesMojo extends AbstractJsTestMojo {
 
     @Override
     protected void run() throws MojoExecutionException, MojoFailureException {
+        if (isSkipTestsCompile()) {
+            getLog().debug("Skipping processing test sources");
+            return;
+        }
         try {
             directoryCopier.copyDirectory(getSourceDir(), getTargetSourceDirectory());
         } catch (IOException e) {
@@ -43,6 +47,11 @@ public class ProcessTestSourcesMojo extends AbstractJsTestMojo {
             ResourceDirectory sourceScriptDirectory = buildSrcResourceDirectory();
             List<String> scan = scriptDirScanner.scan(sourceScriptDirectory);
             for (String file : scan) {
+                if (!file.toLowerCase().endsWith(".js")) {
+                    getLog().debug("Skip instrumentation of file " + file + " as its not a .js file");
+                    continue;
+                }
+
                 try {
                     JsInstrumentedSource instrument = jsInstrumentor.instrument(file,
                             fileUtilsWrapper.readFileToString(new File(sourceScriptDirectory.getDirectory(), file)));

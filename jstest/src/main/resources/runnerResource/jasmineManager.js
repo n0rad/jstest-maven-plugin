@@ -17,7 +17,7 @@ var TestManager = (function() {
 
 
 	return function(isServerMode) {
-		this.serverMode = isServerMode;
+		var serverMode = isServerMode;
 
 		this.run = function() {
 
@@ -37,7 +37,7 @@ var TestManager = (function() {
 			
 			
 			
-			if (!this.serverMode) {
+			if (!serverMode) {
 				window.reporter = new jasmine.JsApiReporter();
 			} else {
 				window.reporter = new Report();

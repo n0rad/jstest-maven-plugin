@@ -34,8 +34,8 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/main/webapp/js</sourceDirectory>
-		<testSourceDirectory>src/test/webapp/js</testSourceDirectory>
+		<sourceDirectory>src/main/webapp</sourceDirectory>
+		<testSourceDirectory>src/test/webapp</testSourceDirectory>
 
 		<finalName>sample-app</finalName>
 		<plugins>

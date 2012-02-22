@@ -11,7 +11,7 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * @goal server
- * @execute lifecycle="jstest-lifecycle" phase="generate-sources"
+ * @execute lifecycle="jstest-lifecycle" phase="generate-test-sources"
  * @requiresDirectInvocation true
  */
 public class ServerMojo extends AbstractJsTestMojo {
