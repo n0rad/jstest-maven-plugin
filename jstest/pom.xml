@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>net.awired.jscoverage</groupId>
 			<artifactId>jscoverage</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.2</version>
 		</dependency>		
 		<dependency>
 			<groupId>org.codehaus.plexus</groupId>
@@ -82,10 +82,10 @@
 			<version>1.1.1</version>
 		</dependency>
 		<dependency>
-        <groupId>org.seleniumhq.selenium</groupId>
-        <artifactId>selenium-java</artifactId>
-        <version>2.11.0</version>
-    </dependency>
+		        <groupId>org.seleniumhq.selenium</groupId>
+        		<artifactId>selenium-java</artifactId>
+        		<version>2.11.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>stringtemplate</artifactId>
