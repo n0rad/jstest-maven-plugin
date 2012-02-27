@@ -7,6 +7,7 @@ import net.awired.jstest.executor.RunnerExecutor;
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
 import net.awired.jstest.resource.ResourceDirectory;
 import net.awired.jstest.resource.ResourceResolver;
+import net.awired.jstest.result.JasmineResult;
 import net.awired.jstest.server.JsTestHandler;
 import net.awired.jstest.server.JsTestServer;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -26,6 +27,11 @@ import com.gargoylesoftware.htmlunit.WebClient;
  */
 public class TestMojo extends AbstractJsTestMojo {
 
+    private String HEADER = "\n" //
+            + "-------------------------------------------------------\n" //
+            + " J S   T E S T S\n" //
+            + "-------------------------------------------------------";
+
     @Override
     public void run() throws MojoExecutionException, MojoFailureException {
         if (isSkipTests()) {
@@ -42,8 +48,11 @@ public class TestMojo extends AbstractJsTestMojo {
             getLog().info("Running test server");
             RunnerExecutor executor = new RunnerExecutor();
             WebDriver driver = createDriver();
-            executor.execute(new URL("http://localhost:" + getServerPort()), getResultReportFile(), driver, 300,
-                    true, getLog(), "documentation", isCoverage(), getCoverageReportFile());
+            getLog().info(HEADER);
+            JasmineResult result = executor.execute(new URL("http://localhost:" + getServerPort()),
+                    getResultReportFile(), driver, 300, true, getLog(), "documentation", isCoverage(),
+                    getCoverageReportFile());
+            getLog().info(result.getDetails());
         } catch (Exception e) {
             throw new RuntimeException("Cannot start Jstest server", e);
         } finally {

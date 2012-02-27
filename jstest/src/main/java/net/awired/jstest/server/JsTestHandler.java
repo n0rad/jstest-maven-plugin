@@ -19,6 +19,7 @@ public class JsTestHandler extends AbstractHandler {
     private final FaviconHandler faviconHandler = new FaviconHandler();
     private final ResourceHandler resourceHandler;
     private final RunnerResourceHandler runnerHandler;
+    private final ResultHandler resultHandler;
     private final Runner runnerGenerator;
     private final RunnerType runnerType;
     private final TestType testType;
@@ -31,6 +32,7 @@ public class JsTestHandler extends AbstractHandler {
         this.testType = testType;
         this.runnerHandler = new RunnerResourceHandler(log);
         this.resourceHandler = new ResourceHandler(log, resolver);
+        this.resultHandler = new ResultHandler(log);
         this.runnerGenerator = runnerType.buildRunner(testType, resolver, serverMode);
     }
 
@@ -55,8 +57,8 @@ public class JsTestHandler extends AbstractHandler {
                 baseRequest.setHandled(true);
                 response.getWriter().write(runnerGenerator.generate());
                 // give root page
-            } else if (target.equals("/result")) {
-                // parse result
+            } else if (target.startsWith("/result/")) {
+                resultHandler.handle(target, baseRequest, request, response);
             }
         } catch (Exception e) {
             log.error("Error on processing request in test server", e);

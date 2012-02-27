@@ -28,6 +28,10 @@ public class RunnerExecutor {
     String jsGetCoverageScript = "JSCOV.storeCurrentRunResult();"
             + "return JSON.stringify(JSCOV.getStoredRunResult());";
 
+    private ObjectMapper mapper = new ObjectMapper();
+    private TypeReference<List<JsRunResult>> typeRef = new TypeReference<List<JsRunResult>>() {
+    };
+
     public JasmineResult execute(URL runnerUrl, File junitXmlReport, WebDriver driver, int timeout, boolean debug,
             Log log, String format, boolean coverage, File coverageReportFile) {
         try {
@@ -97,9 +101,6 @@ public class RunnerExecutor {
 
     private JsRunResult buildCoverageReport(JavascriptExecutor driver) {
         Object junitReport = driver.executeScript(jsGetCoverageScript);
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<JsRunResult>> typeRef = new TypeReference<List<JsRunResult>>() {
-        };
         try {
             List<JsRunResult> runResults = mapper.readValue((String) junitReport, typeRef);
             if (runResults.size() == 0) {
