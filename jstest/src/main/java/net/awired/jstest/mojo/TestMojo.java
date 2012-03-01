@@ -27,11 +27,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
  */
 public class TestMojo extends AbstractJsTestMojo {
 
-    private String HEADER = "\n" //
-            + "-------------------------------------------------------\n" //
-            + " J S   T E S T S\n" //
-            + "-------------------------------------------------------";
-
     @Override
     public void run() throws MojoExecutionException, MojoFailureException {
         if (isSkipTests()) {
@@ -45,16 +40,13 @@ public class TestMojo extends AbstractJsTestMojo {
                     new ArrayList<ResourceDirectory>());
             jsTestServer.startServer(new JsTestHandler(getLog(), scriptResolver, buildAmdRunnerType(),
                     buildTestType(), false));
-            getLog().info("Running test server");
             RunnerExecutor executor = new RunnerExecutor();
             WebDriver driver = createDriver();
-            getLog().info(HEADER);
             JasmineResult result = executor.execute(new URL("http://localhost:" + getServerPort()),
                     getResultReportFile(), driver, 300, true, getLog(), "documentation", isCoverage(),
                     getCoverageReportFile());
-            getLog().info(result.getDetails());
         } catch (Exception e) {
-            throw new RuntimeException("Cannot start Jstest server", e);
+            throw new RuntimeException("Cannot start JsTest server", e);
         } finally {
             jsTestServer.close();
         }

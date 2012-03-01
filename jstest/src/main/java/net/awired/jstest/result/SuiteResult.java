@@ -1,11 +1,18 @@
 package net.awired.jstest.result;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SuiteResult {
 
     private String name;
-    private List<TestResult> tests;
+    private Integer failures;
+    private Integer errors;
+    private Integer skipped;
+    private Long duration;
+    private Long suiteDuration;
+
+    private List<TestResult> tests = new ArrayList<TestResult>();
 
     @Override
     public String toString() {
@@ -27,42 +34,54 @@ public class SuiteResult {
         return builder.toString();
     }
 
-    private Object findDuration() {
-        int duration = 0;
-        for (TestResult result : tests) {
-            duration += result.getDuration();
+    public long findDuration() {
+        if (duration == null) {
+            duration = 0L;
+            for (TestResult result : tests) {
+                duration += result.getDuration();
+            }
         }
         return duration;
     }
 
-    private int findSkipped() {
-        int skipped = 0;
-        for (TestResult result : tests) {
-            if (result.getResultType() == ResultType.skipped) {
-                skipped++;
+    public int findSkipped() {
+        if (skipped == null) {
+            skipped = 0;
+            for (TestResult result : tests) {
+                if (result.getResultType() == ResultType.skipped) {
+                    skipped++;
+                }
             }
         }
         return skipped;
     }
 
-    private int findErrors() {
-        int errors = 0;
-        for (TestResult result : tests) {
-            if (result.getResultType() == ResultType.error) {
-                errors++;
+    public int findErrors() {
+        if (errors == null) {
+            errors = 0;
+            for (TestResult result : tests) {
+                if (result.getResultType() == ResultType.error) {
+                    errors++;
+                }
             }
         }
         return errors;
     }
 
     public int findFailures() {
-        int failures = 0;
-        for (TestResult result : tests) {
-            if (result.getResultType() == ResultType.failure) {
-                failures++;
+        if (failures == null) {
+            failures = 0;
+            for (TestResult result : tests) {
+                if (result.getResultType() == ResultType.failure) {
+                    failures++;
+                }
             }
         }
         return failures;
+    }
+
+    public void addTests(List<TestResult> currentTests) {
+        tests.addAll(currentTests);
     }
 
     //////////////////////////////////////////////////////////
@@ -75,11 +94,12 @@ public class SuiteResult {
         this.name = name;
     }
 
+    public void setTests(List<TestResult> tests) {
+        this.tests = tests;
+    }
+
     public List<TestResult> getTests() {
         return tests;
     }
 
-    public void setTests(List<TestResult> tests) {
-        this.tests = tests;
-    }
 }

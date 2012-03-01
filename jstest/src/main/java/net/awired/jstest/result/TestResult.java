@@ -9,11 +9,11 @@ public class TestResult {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Test '");
+        builder.append("JsTest '");
         builder.append(name);
-        builder.append("' result : ");
+        builder.append("', result:");
         builder.append(resultType);
-        builder.append(" duration : ");
+        builder.append(", duration:");
         builder.append(duration);
         builder.append("ms");
         return builder.toString();

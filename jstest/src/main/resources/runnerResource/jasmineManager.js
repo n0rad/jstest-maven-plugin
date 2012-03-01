@@ -1,3 +1,4 @@
+
 var TestManager = (function() {
 	"use strict";
 
@@ -66,14 +67,15 @@ var TestManager = (function() {
 
 			
 			var testStartTime;
+			var runtime;
 			var ApiReport = function() {
 				
 			};
 			ApiReport.prototype = new jasmine.JsApiReporter();
-//			ApiReport.prototype.reportRunnerResults = function(runner) {
-//				jasmine.JsApiReporter.prototype.reportRunnerResults.call(this, runner);
-//				xmlhttpPost("result/runnerResults", "");
-//			}
+			ApiReport.prototype.reportRunnerResults = function(runner) {
+				jasmine.JsApiReporter.prototype.reportRunnerResults.call(this, runner);
+				xmlhttpPost("result/run", {duration : ""});
+			}
 			ApiReport.prototype.reportSpecResults = function(spec) {
 				var duration = new Date().getTime() - testStartTime;
 				spec.results_.duration = duration;
@@ -90,10 +92,10 @@ var TestManager = (function() {
 											resultType : resultType,
 											duration : duration});
 			}
-//			ApiReport.prototype.reportRunnerStarting = function(runner) {
-//				jasmine.JsApiReporter.prototype.reportRunnerStarting.call(this, runner);
-//				xmlhttpPost("result/runnerStarting", "");
-//			}
+			ApiReport.prototype.reportRunnerStarting = function(runner) {
+				jasmine.JsApiReporter.prototype.reportRunnerStarting.call(this, runner);
+				runtime = new Date().getTime();
+			}
 			ApiReport.prototype.reportSuiteResults = function(suite) {
 				jasmine.JsApiReporter.prototype.reportSuiteResults.call(this, suite);
 				var tests = [];
