@@ -2,6 +2,7 @@ package net.awired.jstest.runner;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.UUID;
 import net.awired.jstest.resource.ResourceResolver;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
@@ -24,14 +25,15 @@ public abstract class Runner {
 
     abstract public void replaceTemplateVars(StringTemplate template);
 
-    private void replaceCommonTemplateVars(StringTemplate template, int browserId, boolean emulator) {
+    private void replaceCommonTemplateVars(StringTemplate template, int browserId, boolean emulator, UUID runId) {
         template.setAttribute("serverMode", serverMode ? "true" : "false");
         template.setAttribute("debug", debug);
         template.setAttribute("browserId", browserId);
         template.setAttribute("emulator", emulator);
+        template.setAttribute("runId", runId);
     }
 
-    public String generate(int browserId, boolean emulator) {
+    public String generate(int browserId, boolean emulator, UUID runId) {
         InputStream templateStream = getClass().getResourceAsStream(runnerType.getTemplate());
         if (templateStream == null) {
             throw new RuntimeException("Cannot found runner template : " + runnerType.getTemplate());
@@ -45,7 +47,7 @@ public abstract class Runner {
             throw new RuntimeException("Cannot parse template " + runnerType.getTemplate(), e);
         }
 
-        replaceCommonTemplateVars(template, browserId, emulator);
+        replaceCommonTemplateVars(template, browserId, emulator, runId);
         replaceTemplateVars(template);
         return template.toString();
     }

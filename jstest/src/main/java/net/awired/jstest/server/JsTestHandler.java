@@ -1,6 +1,7 @@
 package net.awired.jstest.server;
 
 import java.io.IOException;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ public class JsTestHandler extends AbstractHandler {
     private final Runner runnerGenerator;
     private final RunnerType runnerType;
     private final TestType testType;
+    private final UUID runId = UUID.randomUUID();
 
     private int browserId = 0;
 
@@ -44,6 +46,7 @@ public class JsTestHandler extends AbstractHandler {
             response.addDateHeader("EXPIRES", 0L);
             response.addHeader("CACHE_CONTROL", "NO_CACHE");
             response.addHeader("PARAGMA", "NO CACHE");
+            response.addHeader("Access-Control-Allow-Origin", "*");
             if (target.startsWith("/favicon")) {
                 faviconHandler.handle(target, baseRequest, request, response);
                 return;
@@ -57,10 +60,15 @@ public class JsTestHandler extends AbstractHandler {
 
                 response.setStatus(HttpServletResponse.SC_OK);
                 baseRequest.setHandled(true);
-                response.getWriter().write(runnerGenerator.generate(generateBrowserId(), isEmulator(request)));
+                response.getWriter().write(runnerGenerator.generate(generateBrowserId(), isEmulator(request), runId));
                 // give root page
             } else if (target.startsWith("/result/")) {
                 resultHandler.handle(target, baseRequest, request, response);
+            } else if (target.equals("/runId")) {
+                response.getWriter().print(runId);
+
+                response.setStatus(HttpServletResponse.SC_OK);
+                baseRequest.setHandled(true);
             }
         } catch (Exception e) {
             log.error("Error on processing request in test server", e);

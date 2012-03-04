@@ -39,8 +39,8 @@ public class ResultHandler {
         this.log = log;
     }
 
-    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    public synchronized void handle(String target, Request baseRequest, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
         checkFirstReceived();
         lastAction = new Date().getTime();
         ServletInputStream inputStream = request.getInputStream();

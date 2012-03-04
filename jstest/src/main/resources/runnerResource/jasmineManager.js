@@ -4,7 +4,7 @@ var TestManager = (function() {
 
 	document.head = document.head || document.getElementsByTagName('head')[0];
 
-	function xmlhttpPost(strURL, obj) {
+	function xmlhttpPost(strURL, obj, callback) {
 	    var xmlHttpReq = false;
 	    // Mozilla/Safari
 	    if (window.XMLHttpRequest) {
@@ -18,7 +18,9 @@ var TestManager = (function() {
 	    xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	    xmlHttpReq.onreadystatechange = function() {
 	        if (xmlHttpReq.readyState == 4) {
-//	        	document.getElementById("result").innerHTML = self.xmlHttpReq.responseText;
+	        	if (callback != undefined) {
+	        		callback(xmlHttpReq.responseText);
+	        	}
 	        }
 	    }
 	    xmlHttpReq.send(JSON.stringify(obj));
@@ -38,7 +40,7 @@ var TestManager = (function() {
 	}
 
 
-	return function(debug, isServerMode, browserId, emulator) {
+	return function(debug, isServerMode, browserId, runId, emulator) {
 		var serverMode = isServerMode;
 		
 		var generateUrl = function(resource) {
@@ -106,6 +108,13 @@ var TestManager = (function() {
 			ApiReport.prototype.reportRunnerStarting = function(runner) {
 				jasmine.JsApiReporter.prototype.reportRunnerStarting.call(this, runner);
 				runStartTime = new Date().getTime();
+				setInterval(function() {
+					xmlhttpPost('runId', null, function(serverRunId) {
+						if (serverRunId !== '' && runId !== serverRunId) {
+							window.location.reload(true);
+						}
+					});
+				}, 500);
 			}
 			ApiReport.prototype.reportSuiteResults = function(suite) {
 				jasmine.JsApiReporter.prototype.reportSuiteResults.call(this, suite);
