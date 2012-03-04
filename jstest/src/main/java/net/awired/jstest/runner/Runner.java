@@ -24,13 +24,14 @@ public abstract class Runner {
 
     abstract public void replaceTemplateVars(StringTemplate template);
 
-    private void replaceCommonTemplateVars(StringTemplate template, int browserId) {
+    private void replaceCommonTemplateVars(StringTemplate template, int browserId, boolean emulator) {
         template.setAttribute("serverMode", serverMode ? "true" : "false");
         template.setAttribute("debug", debug);
         template.setAttribute("browserId", browserId);
+        template.setAttribute("emulator", emulator);
     }
 
-    public String generate(int browserId) {
+    public String generate(int browserId, boolean emulator) {
         InputStream templateStream = getClass().getResourceAsStream(runnerType.getTemplate());
         if (templateStream == null) {
             throw new RuntimeException("Cannot found runner template : " + runnerType.getTemplate());
@@ -44,7 +45,7 @@ public abstract class Runner {
             throw new RuntimeException("Cannot parse template " + runnerType.getTemplate(), e);
         }
 
-        replaceCommonTemplateVars(template, browserId);
+        replaceCommonTemplateVars(template, browserId, emulator);
         replaceTemplateVars(template);
         return template.toString();
     }

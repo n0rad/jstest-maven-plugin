@@ -57,7 +57,7 @@ public class JsTestHandler extends AbstractHandler {
 
                 response.setStatus(HttpServletResponse.SC_OK);
                 baseRequest.setHandled(true);
-                response.getWriter().write(runnerGenerator.generate(generateBrowserId()));
+                response.getWriter().write(runnerGenerator.generate(generateBrowserId(), isEmulator(request)));
                 // give root page
             } else if (target.startsWith("/result/")) {
                 resultHandler.handle(target, baseRequest, request, response);
@@ -66,6 +66,15 @@ public class JsTestHandler extends AbstractHandler {
             log.error("Error on processing request in test server", e);
         }
 
+    }
+
+    private boolean isEmulator(HttpServletRequest request) {
+        boolean emulator = false;
+        String emulatorParam = request.getParameter("emulator");
+        if (emulatorParam != null) {
+            emulator = Boolean.valueOf(emulatorParam);
+        }
+        return emulator;
     }
 
     public synchronized int generateBrowserId() {

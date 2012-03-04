@@ -38,8 +38,16 @@ var TestManager = (function() {
 	}
 
 
-	return function(debug, isServerMode, browserId) {
+	return function(debug, isServerMode, browserId, emulator) {
 		var serverMode = isServerMode;
+		
+		var generateUrl = function(resource) {
+			var url = resource + '?browserId=' + browserId;
+			if (emulator) {
+				url += '&emulator=true';
+			}
+			return url;
+		}
 
 		this.run = function() {
 
@@ -74,7 +82,7 @@ var TestManager = (function() {
 			ApiReport.prototype = new jasmine.JsApiReporter();
 			ApiReport.prototype.reportRunnerResults = function(runner) {
 				jasmine.JsApiReporter.prototype.reportRunnerResults.call(this, runner);
-				xmlhttpPost("result/run?browserId=" + browserId, new Date().getTime() - runStartTime);
+				xmlhttpPost(generateUrl('result/run'), new Date().getTime() - runStartTime);
 			}
 			ApiReport.prototype.reportSpecResults = function(spec) {
 				var duration = new Date().getTime() - testStartTime;
@@ -91,7 +99,7 @@ var TestManager = (function() {
 				} else if (spec.results_.failedCount) {
 					resultType = 'failure';
 				}
-				xmlhttpPost("result/test?browserId=" + browserId, {name : spec.description,
+				xmlhttpPost(generateUrl('result/test'), {name : spec.description,
 											resultType : resultType,
 											duration : duration});
 			}
@@ -118,7 +126,7 @@ var TestManager = (function() {
 					tests[i].resultType = resultType;
 					tests[i].duration = spec.results_.duration;
 				}
-				xmlhttpPost("result/suite?browserId=" + browserId, {name : suite.description, tests : tests});
+				xmlhttpPost(generateUrl('result/suite'), {name : suite.description, tests : tests});
 			}
 			ApiReport.prototype.reportSpecStarting = function(spec) {
 				testStartTime = new Date().getTime();

@@ -38,7 +38,7 @@ public class TestMojo extends AbstractJsTestMojo {
                     buildTestType(), false, getLog().isDebugEnabled()));
 
             executor = new RunnerExecutor();
-            executor.execute(new URL("http://localhost:" + getServerPort()), 300, true, getLog());
+            executor.execute(new URL("http://localhost:" + getServerPort() + "/?emulator=true"), 300, true, getLog());
             if (!resultHandler.waitAllResult(10000, 1000)) {
                 throw new MojoFailureException("Do not receive all test results from clients");
             } else {

@@ -14,13 +14,15 @@ public class SuiteResult {
 
     private List<TestResult> tests = new ArrayList<TestResult>();
 
-    @Override
-    public String toString() {
+    public String toStringRun(RunResult runResult) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Run suite : ");
+        builder.append("Run suite: ");
         builder.append(name);
-        builder.append("\n");
-        builder.append("Tests run: ");
+        if (runResult != null && !runResult.isEmulator()) {
+            builder.append(", Agent: ");
+            builder.append(runResult.userAgentToString());
+        }
+        builder.append("\nTests run: ");
         builder.append(tests.size());
         builder.append(", Failures: ");
         builder.append(findFailures());
@@ -32,6 +34,11 @@ public class SuiteResult {
         builder.append(findDuration());
         builder.append(" ms");
         return builder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toStringRun(null);
     }
 
     public long findDuration() {

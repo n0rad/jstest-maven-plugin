@@ -49,24 +49,24 @@ public class ResultHandler {
         RunResult runResult = findRunResult(request, valueOf);
 
         if (target.equals("/result/test")) {
-            response.setStatus(HttpServletResponse.SC_OK);
-            baseRequest.setHandled(true);
-
             TestResult testResult = mapper.readValue(inputStream, TestResult.class);
             log.debug(testResult.toString());
-        } else if (target.equals("/result/suite")) {
+
             response.setStatus(HttpServletResponse.SC_OK);
             baseRequest.setHandled(true);
-
+        } else if (target.equals("/result/suite")) {
             SuiteResult suiteResult = mapper.readValue(inputStream, SuiteResult.class);
             runResult.addSuite(suiteResult);
-            out.println(suiteResult);
-        } else if (target.equals("/result/run")) {
+            out.println(suiteResult.toStringRun(runResult));
+
             response.setStatus(HttpServletResponse.SC_OK);
             baseRequest.setHandled(true);
-
+        } else if (target.equals("/result/run")) {
             long duration = mapper.readValue(inputStream, Long.class);
             runResult.setDuration(duration);
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            baseRequest.setHandled(true);
         }
     }
 
@@ -82,6 +82,10 @@ public class ResultHandler {
         if (runResult == null) {
             runResult = new RunResult();
             runResult.setBrowserType(request.getHeader("User-Agent"));
+            String parameter = request.getParameter("emulator");
+            if (parameter != null) {
+                runResult.setEmulator(true);
+            }
             runResults.put(browserId, runResult);
         }
         return runResult;

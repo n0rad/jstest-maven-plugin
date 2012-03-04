@@ -2,12 +2,14 @@ package net.awired.jstest.result;
 
 import java.util.ArrayList;
 import java.util.List;
+import nl.bitwalker.useragentutils.UserAgent;
 
 public class RunResult {
 
     private final List<SuiteResult> suiteResults = new ArrayList<SuiteResult>();
     private Long duration;
-    private String browserType;
+    private UserAgent userAgent;
+    private boolean emulator;
 
     @Override
     public String toString() {
@@ -23,10 +25,19 @@ public class RunResult {
         builder.append(findSkipped());
         builder.append(", Duration: ");
         builder.append(duration);
-        builder.append("ms, Browser: ");
-        builder.append(browserType);
+        builder.append("ms");
+        if (!emulator) {
+            builder.append(", Agent: ");
+            builder.append(userAgentToString());
+        }
         builder.append("\n");
         return builder.toString();
+    }
+
+    public String userAgentToString() {
+        return userAgent.getOperatingSystem().getName() //
+                + ',' + userAgent.getBrowser().getName() //
+                + ' ' + userAgent.getBrowserVersion();
     }
 
     public void addSuite(SuiteResult suiteResult) {
@@ -91,12 +102,24 @@ public class RunResult {
         return duration;
     }
 
-    public String getBrowserType() {
-        return browserType;
+    public void setBrowserType(String browserType) {
+        userAgent = UserAgent.parseUserAgentString(browserType);
     }
 
-    public void setBrowserType(String browserType) {
-        this.browserType = browserType;
+    public UserAgent getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(UserAgent userAgent) {
+        this.userAgent = userAgent;
+    }
+
+    public void setEmulator(boolean emulator) {
+        this.emulator = emulator;
+    }
+
+    public boolean isEmulator() {
+        return emulator;
     }
 
 }

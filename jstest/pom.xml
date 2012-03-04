@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>jstest-maven-plugin</artifactId>
@@ -41,10 +42,10 @@
 
 		<!-- Plugin Dependencies -->
 		<dependency>
-		    <groupId>org.apache.maven.plugins</groupId>
+			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-war-plugin</artifactId>
-  			<version>2.2</version>
-  			<type>maven-plugin</type>
+			<version>2.2</version>
+			<type>maven-plugin</type>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -55,7 +56,7 @@
 			<groupId>net.awired.jscoverage</groupId>
 			<artifactId>jscoverage</artifactId>
 			<version>0.2</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.codehaus.plexus</groupId>
 			<artifactId>plexus-utils</artifactId>
@@ -82,9 +83,9 @@
 			<version>1.1.1</version>
 		</dependency>
 		<dependency>
-		        <groupId>org.seleniumhq.selenium</groupId>
-        		<artifactId>selenium-java</artifactId>
-        		<version>2.11.0</version>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.11.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -110,6 +111,11 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>nl.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>1.2.4</version>
 		</dependency>
 
 		<!-- Plugin test deps -->
