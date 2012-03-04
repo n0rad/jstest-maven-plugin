@@ -1,10 +1,12 @@
 package net.awired.jstest.runner;
 
 import net.awired.jstest.resource.ResourceResolver;
+import net.awired.jstest.runner.impl.CurlRunner;
+import net.awired.jstest.runner.impl.DefaultRunner;
 
 public enum RunnerType {
     DEFAULT(DefaultRunner.class, "/runnerTemplate/defaultRunner.tpl"), //
-    REQUIREJS(RequireJsRunner.class, "/runnerTemplate/requireRunner.tpl", "require.js"), //
+    //    REQUIREJS(RequireJsRunner.class, "/runnerTemplate/requireRunner.tpl", "require.js"), //
     CURL(CurlRunner.class, "/runnerTemplate/curlRunner.tpl", "curl.js"), //
     ;
 
@@ -41,11 +43,12 @@ public enum RunnerType {
         return template;
     }
 
-    public Runner buildRunner(TestType testType, ResourceResolver resolver, boolean serverMode) {
+    public Runner buildRunner(TestType testType, ResourceResolver resolver, boolean serverMode, boolean debug) {
         try {
             Runner runner = runnerClass.newInstance();
             runner.setTestType(testType);
             runner.setResolver(resolver);
+            runner.setDebug(debug);
             runner.setServerMode(serverMode);
             return runner;
         } catch (Exception e) {

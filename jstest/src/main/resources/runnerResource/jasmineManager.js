@@ -38,7 +38,7 @@ var TestManager = (function() {
 	}
 
 
-	return function(isServerMode) {
+	return function(debug, isServerMode, browserId) {
 		var serverMode = isServerMode;
 
 		this.run = function() {
@@ -67,19 +67,22 @@ var TestManager = (function() {
 
 			
 			var testStartTime;
-			var runtime;
+			var runStartTime;
 			var ApiReport = function() {
 				
 			};
 			ApiReport.prototype = new jasmine.JsApiReporter();
 			ApiReport.prototype.reportRunnerResults = function(runner) {
 				jasmine.JsApiReporter.prototype.reportRunnerResults.call(this, runner);
-				xmlhttpPost("result/run", {duration : ""});
+				xmlhttpPost("result/run?browserId=" + browserId, new Date().getTime() - runStartTime);
 			}
 			ApiReport.prototype.reportSpecResults = function(spec) {
 				var duration = new Date().getTime() - testStartTime;
 				spec.results_.duration = duration;
 				jasmine.JsApiReporter.prototype.reportSpecResults.call(this, spec);
+				if (!debug) {
+					return;
+				}
 				var resultType;
 				if (spec.results_.skipped) {
 					resultType = 'skipped';
@@ -88,13 +91,13 @@ var TestManager = (function() {
 				} else if (spec.results_.failedCount) {
 					resultType = 'failure';
 				}
-				xmlhttpPost("result/test", {name : spec.description,
+				xmlhttpPost("result/test?browserId=" + browserId, {name : spec.description,
 											resultType : resultType,
 											duration : duration});
 			}
 			ApiReport.prototype.reportRunnerStarting = function(runner) {
 				jasmine.JsApiReporter.prototype.reportRunnerStarting.call(this, runner);
-				runtime = new Date().getTime();
+				runStartTime = new Date().getTime();
 			}
 			ApiReport.prototype.reportSuiteResults = function(suite) {
 				jasmine.JsApiReporter.prototype.reportSuiteResults.call(this, suite);
@@ -115,10 +118,9 @@ var TestManager = (function() {
 					tests[i].resultType = resultType;
 					tests[i].duration = spec.results_.duration;
 				}
-				xmlhttpPost("result/suite", {name : suite.description, tests : tests});
+				xmlhttpPost("result/suite?browserId=" + browserId, {name : suite.description, tests : tests});
 			}
 			ApiReport.prototype.reportSpecStarting = function(spec) {
-				xmlhttpPost("result/specStarting", {name : spec.description});
 				testStartTime = new Date().getTime();
 			}
 

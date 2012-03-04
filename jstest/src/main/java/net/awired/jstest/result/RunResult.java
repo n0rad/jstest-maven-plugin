@@ -7,6 +7,7 @@ public class RunResult {
 
     private final List<SuiteResult> suiteResults = new ArrayList<SuiteResult>();
     private Long duration;
+    private String browserType;
 
     @Override
     public String toString() {
@@ -20,6 +21,10 @@ public class RunResult {
         builder.append(findErrors());
         builder.append(", Skipped: ");
         builder.append(findSkipped());
+        builder.append(", Duration: ");
+        builder.append(duration);
+        builder.append("ms, Browser: ");
+        builder.append(browserType);
         builder.append("\n");
         return builder.toString();
     }
@@ -60,12 +65,16 @@ public class RunResult {
         return skipped;
     }
 
-    private long findDuration() {
+    private long findAggregatedDuration() {
         long duration = 0;
         for (SuiteResult suiteResult : suiteResults) {
             duration += suiteResult.findDuration();
         }
         return duration;
+    }
+
+    public boolean isFinished() {
+        return duration != null;
     }
 
     //////////////////////////////:
@@ -80,6 +89,14 @@ public class RunResult {
 
     public Long getDuration() {
         return duration;
+    }
+
+    public String getBrowserType() {
+        return browserType;
+    }
+
+    public void setBrowserType(String browserType) {
+        this.browserType = browserType;
     }
 
 }

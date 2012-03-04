@@ -16,6 +16,7 @@ public abstract class Runner {
     protected final RunnerType runnerType;
     protected TestType testType;
     protected boolean serverMode;
+    protected boolean debug;
 
     protected Runner(RunnerType runnerType) {
         this.runnerType = runnerType;
@@ -23,7 +24,13 @@ public abstract class Runner {
 
     abstract public void replaceTemplateVars(StringTemplate template);
 
-    public String generate() {
+    private void replaceCommonTemplateVars(StringTemplate template, int browserId) {
+        template.setAttribute("serverMode", serverMode ? "true" : "false");
+        template.setAttribute("debug", debug);
+        template.setAttribute("browserId", browserId);
+    }
+
+    public String generate(int browserId) {
         InputStream templateStream = getClass().getResourceAsStream(runnerType.getTemplate());
         if (templateStream == null) {
             throw new RuntimeException("Cannot found runner template : " + runnerType.getTemplate());
@@ -37,6 +44,7 @@ public abstract class Runner {
             throw new RuntimeException("Cannot parse template " + runnerType.getTemplate(), e);
         }
 
+        replaceCommonTemplateVars(template, browserId);
         replaceTemplateVars(template);
         return template.toString();
     }
@@ -67,6 +75,14 @@ public abstract class Runner {
 
     public void setServerMode(boolean serverMode) {
         this.serverMode = serverMode;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
 }

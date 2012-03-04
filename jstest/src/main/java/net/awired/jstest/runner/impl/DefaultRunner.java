@@ -1,7 +1,9 @@
-package net.awired.jstest.runner;
+package net.awired.jstest.runner.impl;
 
 import net.awired.jscoverage.instrumentation.JsInstrumentor;
 import net.awired.jstest.resource.ResourceResolver;
+import net.awired.jstest.runner.Runner;
+import net.awired.jstest.runner.RunnerType;
 import net.awired.jstest.server.RunnerResourceHandler;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -16,7 +18,6 @@ public class DefaultRunner extends Runner {
         template.setAttribute("testResources", buildTestResources(resolver));
         template.setAttribute("sources", htmlResourceTranformer.buildTagsFromResources(resolver.FilterSourcesKeys()));
         template.setAttribute("tests", htmlResourceTranformer.buildTagsFromResources(resolver.FilterTestsKeys()));
-        template.setAttribute("serverMode", serverMode ? "true" : "false");
     }
 
     private String buildTestResources(ResourceResolver resolver) {

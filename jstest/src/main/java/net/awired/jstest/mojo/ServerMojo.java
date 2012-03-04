@@ -6,6 +6,7 @@ import net.awired.jstest.resource.ResourceDirectory;
 import net.awired.jstest.resource.ResourceResolver;
 import net.awired.jstest.server.JsTestHandler;
 import net.awired.jstest.server.JsTestServer;
+import net.awired.jstest.server.ResultHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -33,8 +34,9 @@ public class ServerMojo extends AbstractJsTestMojo {
             ResourceResolver scriptResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(true),
                     buildTestResourceDirectory(), buildOverlaysResourceDirectories(),
                     new ArrayList<ResourceDirectory>());
-            jsTestServer.startServer(new JsTestHandler(getLog(), scriptResolver, buildAmdRunnerType(),
-                    buildTestType(), true));
+            ResultHandler resultHandler = new ResultHandler(getLog());
+            jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), scriptResolver, buildAmdRunnerType(),
+                    buildTestType(), true, getLog().isDebugEnabled()));
             getLog().info(INSTRUCTION_FORMAT);
             jsTestServer.join();
         } catch (Exception e) {

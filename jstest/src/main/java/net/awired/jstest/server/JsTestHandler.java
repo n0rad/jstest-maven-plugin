@@ -24,16 +24,18 @@ public class JsTestHandler extends AbstractHandler {
     private final RunnerType runnerType;
     private final TestType testType;
 
-    public JsTestHandler(Log log, ResourceResolver resolver, RunnerType runnerType, TestType testType,
-            boolean serverMode) {
+    private int browserId = 0;
+
+    public JsTestHandler(ResultHandler result, Log log, ResourceResolver resolver, RunnerType runnerType,
+            TestType testType, boolean serverMode, boolean debug) {
         this.log = log;
         this.resourceResolver = resolver;
         this.runnerType = runnerType;
         this.testType = testType;
         this.runnerHandler = new RunnerResourceHandler(log);
         this.resourceHandler = new ResourceHandler(log, resolver);
-        this.resultHandler = new ResultHandler(log);
-        this.runnerGenerator = runnerType.buildRunner(testType, resolver, serverMode);
+        this.resultHandler = result;
+        this.runnerGenerator = runnerType.buildRunner(testType, resolver, serverMode, debug);
     }
 
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
@@ -55,7 +57,7 @@ public class JsTestHandler extends AbstractHandler {
 
                 response.setStatus(HttpServletResponse.SC_OK);
                 baseRequest.setHandled(true);
-                response.getWriter().write(runnerGenerator.generate());
+                response.getWriter().write(runnerGenerator.generate(generateBrowserId()));
                 // give root page
             } else if (target.startsWith("/result/")) {
                 resultHandler.handle(target, baseRequest, request, response);
@@ -64,6 +66,10 @@ public class JsTestHandler extends AbstractHandler {
             log.error("Error on processing request in test server", e);
         }
 
+    }
+
+    public synchronized int generateBrowserId() {
+        return browserId++;
     }
 
 }
