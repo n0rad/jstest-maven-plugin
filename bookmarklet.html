@@ -1,40 +1,36 @@
 <html>
 <head></head>
-<body>
-	<script type="text/javascript">
-		
-	</script>
+<body></body>
+<script type="text/javascript">
+	// go to http://jscompress.com/ to compress js
 
-	<a href="javascript:(function() {
+	javascript: (function() {
 
-			function xmlhttpPost(strURL, obj, callback) {
-				var xmlHttpReq = false;
-				// Mozilla/Safari
-				if (window.XMLHttpRequest) {
-					xmlHttpReq = new XMLHttpRequest();
-				}
-				// IE
-				else if (window.ActiveXObject) {
-					xmlHttpReq = new ActiveXObject('Microsoft.XMLHTTP');
-				}
-				xmlHttpReq.open('POST', strURL, true);
-				xmlHttpReq.setRequestHeader('Content-Type',
-						'application/x-www-form-urlencoded');
-				xmlHttpReq.onreadystatechange = function() {
-					if (xmlHttpReq.readyState == 4) {
-						if (callback != undefined) {
-							callback(xmlHttpReq.responseText);
-						}
+		var xmlhttpPost = function(strURL, obj, callback) {
+			var xmlHttpReq = false;
+			if (window.XMLHttpRequest) {
+				xmlHttpReq = new XMLHttpRequest();
+			} else if (window.ActiveXObject) {
+				xmlHttpReq = new ActiveXObject('Microsoft.XMLHTTP');
+			}
+			xmlHttpReq.open('POST', strURL, true);
+			xmlHttpReq.setRequestHeader('Content-Type',
+					'application/x-www-form-urlencoded');
+			xmlHttpReq.onreadystatechange = function() {
+				if (xmlHttpReq.readyState == 4) {
+					if (callback != undefined) {
+						callback(xmlHttpReq.responseText);
 					}
 				}
-				xmlHttpReq.send(JSON.stringify(obj));
 			}
+			xmlHttpReq.send(JSON.stringify(obj));
+		}
 
-			document.documentElement.innerHTML = 'salut';
+		var url = prompt('What is the url of JsTest server ?',
+				'http://localhost:8234');
 
-			var url = prompt('What is the url of JsTest server ?',
-					'http://localhost:8234');
-
+		if (url !== null) {
+			document.documentElement.innerHTML = 'Waiting for server...';
 			setInterval(function() {
 				xmlhttpPost(url + '/runId', null, function(serverRunId) {
 					if (serverRunId !== '') {
@@ -42,7 +38,8 @@
 					}
 				});
 			}, 500);
+		}
 
-		})()">test</a>
-</body>
+	})()
+</script>
 </html>

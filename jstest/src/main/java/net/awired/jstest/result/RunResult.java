@@ -14,22 +14,15 @@ public class RunResult {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("\nResults :\n\n");
-        builder.append("JsTests run: ");
-        builder.append(findTests());
-        builder.append(", Failures: ");
-        builder.append(findFailures());
-        builder.append(", Errors: ");
-        builder.append(findErrors());
-        builder.append(", Skipped: ");
-        builder.append(findSkipped());
+        builder.append("Agent: ");
+        if (!emulator) {
+            builder.append(userAgentToString());
+        } else {
+            builder.append("emulator");
+        }
         builder.append(", Duration: ");
         builder.append(duration);
         builder.append("ms");
-        if (!emulator) {
-            builder.append(", Agent: ");
-            builder.append(userAgentToString());
-        }
         builder.append("\n");
         return builder.toString();
     }
@@ -44,7 +37,7 @@ public class RunResult {
         suiteResults.add(suiteResult);
     }
 
-    private int findTests() {
+    public int findTests() {
         int tests = 0;
         for (SuiteResult suiteResult : suiteResults) {
             tests += suiteResult.getTests().size();
@@ -52,7 +45,7 @@ public class RunResult {
         return tests;
     }
 
-    private int findFailures() {
+    public int findFailures() {
         int failures = 0;
         for (SuiteResult suiteResult : suiteResults) {
             failures += suiteResult.findFailures();
@@ -60,7 +53,7 @@ public class RunResult {
         return failures;
     }
 
-    private int findErrors() {
+    public int findErrors() {
         int errors = 0;
         for (SuiteResult suiteResult : suiteResults) {
             errors += suiteResult.findErrors();
@@ -68,7 +61,7 @@ public class RunResult {
         return errors;
     }
 
-    private int findSkipped() {
+    public int findSkipped() {
         int skipped = 0;
         for (SuiteResult suiteResult : suiteResults) {
             skipped += suiteResult.findSkipped();

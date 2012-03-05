@@ -11,11 +11,11 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
- * @goal server
+ * @goal dev
  * @execute lifecycle="jstest-lifecycle" phase="generate-test-sources"
  * @requiresDirectInvocation true
  */
-public class ServerMojo extends AbstractJsTestMojo {
+public class DevMojo extends AbstractJsTestMojo {
 
     public static final String INSTRUCTION_FORMAT = "\n\n"
             + "Server started--it's time to spec some JavaScript! You can run your specs as you develop by visiting this URL in a web browser: \n\n"

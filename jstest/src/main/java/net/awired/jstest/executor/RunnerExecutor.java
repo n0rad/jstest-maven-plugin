@@ -2,7 +2,6 @@ package net.awired.jstest.executor;
 
 import java.lang.reflect.Constructor;
 import java.net.URL;
-import org.apache.maven.plugin.logging.Log;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -63,7 +62,7 @@ public class RunnerExecutor {
         return driver;
     }
 
-    public void execute(URL runnerUrl, int timeout, boolean debug, Log log) {
+    public void execute(URL runnerUrl) {
         try {
             driver.get(runnerUrl.toString());
         } catch (Exception e) {

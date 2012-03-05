@@ -66,6 +66,11 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     private boolean coverage;
 
     /**
+     * @parameter expression="${emulator}" default-value="true"
+     */
+    private boolean emulator;
+
+    /**
      * @parameter expression="${amdType}"
      */
     private RunnerType runnerType = RunnerType.DEFAULT;
@@ -225,6 +230,10 @@ public abstract class JsTestConfiguration extends AbstractMojo {
 
     public File getResultReportFile() {
         return resultReportFile;
+    }
+
+    public boolean isEmulator() {
+        return emulator;
     }
 
 }

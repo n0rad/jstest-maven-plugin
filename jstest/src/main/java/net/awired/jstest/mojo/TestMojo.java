@@ -37,8 +37,10 @@ public class TestMojo extends AbstractJsTestMojo {
             jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), scriptResolver, buildAmdRunnerType(),
                     buildTestType(), false, getLog().isDebugEnabled()));
 
-            executor = new RunnerExecutor();
-            executor.execute(new URL("http://localhost:" + getServerPort() + "/?emulator=true"), 300, true, getLog());
+            if (isEmulator()) {
+                executor = new RunnerExecutor();
+                executor.execute(new URL("http://localhost:" + getServerPort() + "/?emulator=true"));
+            }
 
             // let browser detect that server is back
             Thread.sleep(1000);
