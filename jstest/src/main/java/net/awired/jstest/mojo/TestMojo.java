@@ -6,9 +6,9 @@ import net.awired.jstest.executor.RunnerExecutor;
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
 import net.awired.jstest.resource.ResourceDirectory;
 import net.awired.jstest.resource.ResourceResolver;
-import net.awired.jstest.server.JsTestHandler;
 import net.awired.jstest.server.JsTestServer;
-import net.awired.jstest.server.ResultHandler;
+import net.awired.jstest.server.handler.JsTestHandler;
+import net.awired.jstest.server.handler.ResultHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -27,28 +27,26 @@ public class TestMojo extends AbstractJsTestMojo {
             return;
         }
 
-        JsTestServer jsTestServer = new JsTestServer(getLog(), getServerPort());
+        JsTestServer jsTestServer = new JsTestServer(getLog(), getTestPort(), isTestPortFindFree());
         RunnerExecutor executor = null;
         try {
             ResourceResolver scriptResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(false),
                     buildTestResourceDirectory(), buildOverlaysResourceDirectories(),
                     new ArrayList<ResourceDirectory>());
-            ResultHandler resultHandler = new ResultHandler(getLog());
+            ResultHandler resultHandler = new ResultHandler(getLog(), getPreparedReportDir());
             jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), scriptResolver, buildAmdRunnerType(),
                     buildTestType(), false, getLog().isDebugEnabled()));
 
             if (isEmulator()) {
                 executor = new RunnerExecutor();
-                executor.execute(new URL("http://localhost:" + getServerPort() + "/?emulator=true"));
+                executor.execute(new URL("http://localhost:" + getDevPort() + "/?emulator=true"));
             }
 
-            // let browser detect that server is back
+            // let browsers detect that server is back
             Thread.sleep(1000);
 
             if (!resultHandler.waitAllResult(10000, 1000)) {
                 throw new MojoFailureException("Do not receive all test results from clients");
-            } else {
-                System.out.println(resultHandler.getRunResults().toString());
             }
         } catch (Exception e) {
             throw new MojoExecutionException("JsTest execution failure", e);

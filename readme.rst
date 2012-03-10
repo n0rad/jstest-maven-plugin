@@ -3,11 +3,14 @@ JsTest Maven Plugin
 
 JsTest is a maven plugin to test javascript.
 
-
+There is 2 modes for this plugin
+ - **dev mode** which is a specific goal for maven that you call directly (**jstest:dev**)
+	 this mode start a jetty server and wait for you to connect to it to launch tests and report results
+ - **test mode** is plugged in maven's normal lifecycle to launch tests and report in **test goal** 
 
 
 JsTest support in both modes :
- - multiple test framework like **jasmine, **Qunit**, or your **own** one (need to implement JsTest interface)
+ - multiple test framework like **jasmine**, **Qunit**, or your **own** one (need to implement JsTest interface)
  - auto loading of script files or AMD support (requireJS, curl)
  - maven war overlays sources projects !
  - maven war overlays for tests dependencies !

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
 import net.awired.jstest.resource.ResourceDirectory;
 import net.awired.jstest.resource.ResourceResolver;
-import net.awired.jstest.server.JsTestHandler;
 import net.awired.jstest.server.JsTestServer;
-import net.awired.jstest.server.ResultHandler;
+import net.awired.jstest.server.handler.JsTestHandler;
+import net.awired.jstest.server.handler.ResultHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -29,12 +29,13 @@ public class DevMojo extends AbstractJsTestMojo {
 
     @Override
     public void run() throws MojoExecutionException, MojoFailureException {
-        JsTestServer jsTestServer = new JsTestServer(getLog(), getServerPort());
+        JsTestServer jsTestServer = new JsTestServer(getLog(), getDevPort(), false);
         try {
             ResourceResolver scriptResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(true),
                     buildTestResourceDirectory(), buildOverlaysResourceDirectories(),
                     new ArrayList<ResourceDirectory>());
-            ResultHandler resultHandler = new ResultHandler(getLog());
+            //TODO remove resultHandler creation we dont need it here
+            ResultHandler resultHandler = new ResultHandler(getLog(), null);
             jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), scriptResolver, buildAmdRunnerType(),
                     buildTestType(), true, getLog().isDebugEnabled()));
             getLog().info(INSTRUCTION_FORMAT);

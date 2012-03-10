@@ -1,4 +1,4 @@
-package net.awired.jstest.server;
+package net.awired.jstest.server.handler;
 
 import java.io.IOException;
 import java.util.UUID;

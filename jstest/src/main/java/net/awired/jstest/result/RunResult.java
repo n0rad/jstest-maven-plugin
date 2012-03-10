@@ -2,35 +2,30 @@ package net.awired.jstest.result;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.awired.jscoverage.result.CoverageResult;
 import nl.bitwalker.useragentutils.UserAgent;
 
 public class RunResult {
 
     private final List<SuiteResult> suiteResults = new ArrayList<SuiteResult>();
-    private Long duration;
+    private long duration;
     private UserAgent userAgent;
     private boolean emulator;
+    private CoverageResult coverageResult;
+    private final int browserId;
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Agent: ");
-        if (!emulator) {
-            builder.append(userAgentToString());
-        } else {
-            builder.append("emulator");
-        }
-        builder.append(", Duration: ");
-        builder.append(duration);
-        builder.append("ms");
-        builder.append("\n");
-        return builder.toString();
+    public RunResult(int browserId) {
+        this.browserId = browserId;
     }
 
     public String userAgentToString() {
-        return userAgent.getOperatingSystem().getName() //
-                + ',' + userAgent.getBrowser().getName() //
-                + ' ' + userAgent.getBrowserVersion();
+        if (emulator) {
+            return "emulator";
+        } else {
+            return userAgent.getOperatingSystem().getName() //
+                    + ',' + userAgent.getBrowser().getName() //
+                    + ' ' + userAgent.getBrowserVersion();
+        }
     }
 
     public void addSuite(SuiteResult suiteResult) {
@@ -48,7 +43,7 @@ public class RunResult {
     public int findFailures() {
         int failures = 0;
         for (SuiteResult suiteResult : suiteResults) {
-            failures += suiteResult.findFailures();
+            failures += suiteResult.getFailures();
         }
         return failures;
     }
@@ -56,7 +51,7 @@ public class RunResult {
     public int findErrors() {
         int errors = 0;
         for (SuiteResult suiteResult : suiteResults) {
-            errors += suiteResult.findErrors();
+            errors += suiteResult.getErrors();
         }
         return errors;
     }
@@ -64,7 +59,7 @@ public class RunResult {
     public int findSkipped() {
         int skipped = 0;
         for (SuiteResult suiteResult : suiteResults) {
-            skipped += suiteResult.findSkipped();
+            skipped += suiteResult.getSkipped();
         }
         return skipped;
     }
@@ -72,13 +67,13 @@ public class RunResult {
     private long findAggregatedDuration() {
         long duration = 0;
         for (SuiteResult suiteResult : suiteResults) {
-            duration += suiteResult.findDuration();
+            duration += suiteResult.getDuration();
         }
         return duration;
     }
 
     public boolean isFinished() {
-        return duration != null;
+        return duration > 0;
     }
 
     //////////////////////////////:
@@ -87,11 +82,11 @@ public class RunResult {
         return suiteResults;
     }
 
-    public void setDuration(Long duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
-    public Long getDuration() {
+    public long getDuration() {
         return duration;
     }
 
@@ -113,6 +108,18 @@ public class RunResult {
 
     public boolean isEmulator() {
         return emulator;
+    }
+
+    public int getBrowserId() {
+        return browserId;
+    }
+
+    public CoverageResult getCoverageResult() {
+        return coverageResult;
+    }
+
+    public void setCoverageResult(CoverageResult coverageResult) {
+        this.coverageResult = coverageResult;
     }
 
 }

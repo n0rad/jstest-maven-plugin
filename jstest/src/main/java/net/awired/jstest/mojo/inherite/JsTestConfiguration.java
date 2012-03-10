@@ -56,9 +56,21 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     private List<String> overlayExcludes = ResourceDirectory.DEFAULT_EXCLUDES;
 
     /**
-     * @parameter default-value="0" expression="${serverPort}"
+     * @parameter default-value="8234" expression="${devPort}"
      */
-    private int serverPort;
+    private int devPort;
+
+    /**
+     * @parameter default-value="8234" expression="${testPort}"
+     */
+    private int testPort;
+
+    /**
+     * will increment port number if not free
+     * 
+     * @parameter default-value="true" expression="${testPortFindFree}"
+     */
+    private boolean testPortFindFree;
 
     /**
      * @parameter expression="${coverage}" default-value="false"
@@ -118,9 +130,9 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     private File coverageReportFile;
 
     /**
-     * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}TEST-jstest.xml"
+     * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}report"
      */
-    private File resultReportFile;
+    private File reportDir;
 
     /**
      * @parameter default-value="${project.build.directory}${file.separator}jstest${file.separator}src"
@@ -190,6 +202,11 @@ public abstract class JsTestConfiguration extends AbstractMojo {
         }
     }
 
+    public File getPreparedReportDir() {
+        reportDir.mkdirs();
+        return reportDir;
+    }
+
     public ResourceDirectory buildTestResourceDirectory() {
         ResourceDirectory resourceDirectory = new ResourceDirectory(testDir, testIncludes, testExcludes);
         resourceDirectory.setUpdatable(true);
@@ -220,20 +237,24 @@ public abstract class JsTestConfiguration extends AbstractMojo {
         return sourceDir;
     }
 
-    public int getServerPort() {
-        return serverPort;
+    public int getDevPort() {
+        return devPort;
     }
 
     public File getCoverageReportFile() {
         return coverageReportFile;
     }
 
-    public File getResultReportFile() {
-        return resultReportFile;
-    }
-
     public boolean isEmulator() {
         return emulator;
+    }
+
+    public int getTestPort() {
+        return testPort;
+    }
+
+    public boolean isTestPortFindFree() {
+        return testPortFindFree;
     }
 
 }

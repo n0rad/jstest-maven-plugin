@@ -2,8 +2,6 @@
 var TestManager = (function() {
 	"use strict";
 
-	document.head = document.head || document.getElementsByTagName('head')[0];
-
 	function xmlhttpPost(strURL, obj, callback) {
 	    var xmlHttpReq = false;
 	    // Mozilla/Safari
@@ -50,6 +48,32 @@ var TestManager = (function() {
 			}
 			return url;
 		}
+		
+		var buildFailureDesc = function(jasmineExpectResult) {
+			var failDesc = {};
+			failDesc.message = jasmineExpectResult.message;
+			failDesc.expected = jasmineExpectResult.expected;
+			failDesc.actual = jasmineExpectResult.actual;
+			failDesc.type = jasmineExpectResult.matcherName;
+			failDesc.value = jasmineExpectResult.trace.stack;
+			if (failDesc.value == undefined) {
+				failDesc.value = failDesc.message;
+			}
+			return failDesc;
+		}
+		
+		var buildTestResult = function(spec) {
+			var test = {};
+			test.name = spec.description;
+			if (spec.results_.skipped) {
+				test.skipped = true;
+			}
+			test.duration = spec.results_.duration;	
+			if (spec.results_.failedCount) {
+				test.failure = buildFailureDesc(spec.results_.items_[0]);
+			}			
+			return test;
+		}
 
 		this.run = function() {
 
@@ -78,14 +102,29 @@ var TestManager = (function() {
 			
 			var testStartTime;
 			var runStartTime;
+			var suiteStartTime;
 			var ApiReport = function() {
 				
 			};
 			ApiReport.prototype = new jasmine.JsApiReporter();
+			
 			ApiReport.prototype.reportRunnerResults = function(runner) {
 				jasmine.JsApiReporter.prototype.reportRunnerResults.call(this, runner);
-				xmlhttpPost(generateUrl('result/run'), new Date().getTime() - runStartTime);
+				var runResult = {};
+				JSCOV.storeCurrentRunResult('jasmineRun');
+				runResult.coverageResult = JSCOV.getStoredRunResult()[0];
+				runResult.duration = new Date().getTime() - runStartTime;
+				xmlhttpPost(generateUrl('result/run'), runResult);
+				
+				setInterval(function() {
+					xmlhttpPost('runId', null, function(serverRunId) {
+						if (serverRunId !== '' && runId !== serverRunId) {
+							window.location.reload(true);
+						}
+					});
+				}, 500);
 			}
+			
 			ApiReport.prototype.reportSpecResults = function(spec) {
 				var duration = new Date().getTime() - testStartTime;
 				spec.results_.duration = duration;
@@ -105,38 +144,28 @@ var TestManager = (function() {
 											resultType : resultType,
 											duration : duration});
 			}
+			
 			ApiReport.prototype.reportRunnerStarting = function(runner) {
 				jasmine.JsApiReporter.prototype.reportRunnerStarting.call(this, runner);
 				runStartTime = new Date().getTime();
-				setInterval(function() {
-					xmlhttpPost('runId', null, function(serverRunId) {
-						if (serverRunId !== '' && runId !== serverRunId) {
-							window.location.reload(true);
-						}
-					});
-				}, 500);
+				suiteStartTime = runStartTime;
 			}
+			
 			ApiReport.prototype.reportSuiteResults = function(suite) {
 				jasmine.JsApiReporter.prototype.reportSuiteResults.call(this, suite);
 				var tests = [];
 				for (var i = 0; i < suite.specs_.length; i++) {
-					var spec = suite.specs_[i];
-					tests[i] = {};
-					tests[i].name = spec.description;
-					
-					var resultType;
-					if (spec.results_.skipped) {
-						resultType = 'skipped';
-					} else if (spec.results_.passedCount) {
-						resultType = 'success';
-					} else if (spec.results_.failedCount) {
-						resultType = 'failure';
-					}
-					tests[i].resultType = resultType;
-					tests[i].duration = spec.results_.duration;
+					tests[i] = buildTestResult(suite.specs_[i]);
 				}
-				xmlhttpPost(generateUrl('result/suite'), {name : suite.description, tests : tests});
+
+				var suiteResult = {};
+				suiteResult.name = suite.description;
+				suiteResult.tests = tests;
+				suiteResult.duration = new Date().getTime() - suiteStartTime;
+				xmlhttpPost(generateUrl('result/suite'), suiteResult);
+				suiteStartTime = new Date().getTime();
 			}
+			
 			ApiReport.prototype.reportSpecStarting = function(spec) {
 				testStartTime = new Date().getTime();
 			}

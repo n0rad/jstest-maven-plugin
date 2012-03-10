@@ -9,23 +9,19 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 
 public class JsTestServer {
-    private static final int MIN_PORT = 10000;
-    private static final int MAX_PORT = 65535;
 
     private final Log log;
 
     private Server server = new Server();
     private int port;
 
-    public JsTestServer(Log log, int port) {
+    public JsTestServer(Log log, int wantedPort, boolean findFreePort) {
         this.log = log;
-        this.port = port;
-        if (port <= 0 || port >= 65535) {
-            int tmpPort;
-            do {
-                tmpPort = MIN_PORT + (int) (Math.random() * ((MAX_PORT - MIN_PORT) + 1));
-            } while (!available(tmpPort));
-            this.port = tmpPort;
+        this.port = wantedPort;
+        if (findFreePort) {
+            while (!available(this.port)) {
+                this.port++;
+            }
         }
     }
 

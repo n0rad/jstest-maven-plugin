@@ -4,7 +4,7 @@ import net.awired.jscoverage.instrumentation.JsInstrumentor;
 import net.awired.jstest.resource.ResourceResolver;
 import net.awired.jstest.runner.Runner;
 import net.awired.jstest.runner.RunnerType;
-import net.awired.jstest.server.RunnerResourceHandler;
+import net.awired.jstest.server.handler.RunnerResourceHandler;
 import org.antlr.stringtemplate.StringTemplate;
 
 public class DefaultRunner extends Runner {
