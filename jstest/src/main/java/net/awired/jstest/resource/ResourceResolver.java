@@ -2,6 +2,7 @@ package net.awired.jstest.resource;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.maven.plugin.logging.Log;
@@ -67,6 +68,7 @@ public class ResourceResolver {
     }
 
     public void updateChangeableDirectories() {
+        cleanNotExists();
         if (source.isUpdatable()) {
             log.debug("Updating directory files for " + source.getDirectory());
             registerResourcesToMap(SRC_RESOURCE_PREFIX, directoryScanner.scan(source), source.getDirectory(), false);
@@ -84,6 +86,7 @@ public class ResourceResolver {
 
     public Map<String, File> FilterSourcesKeys() {
         return Maps.filterKeys(resources, new Predicate<String>() {
+            @Override
             public boolean apply(String input) {
                 return input.startsWith(SRC_RESOURCE_PREFIX);
             }
@@ -92,9 +95,22 @@ public class ResourceResolver {
 
     public Map<String, File> FilterTestsKeys() {
         return Maps.filterKeys(resources, new Predicate<String>() {
+            @Override
             public boolean apply(String input) {
                 return input.startsWith(TEST_RESOURCE_PREFIX);
             }
         });
     }
+
+    private void cleanNotExists() {
+        Iterator<String> iterator = resources.keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            File val = resources.get(key);
+            if (!val.exists()) {
+                iterator.remove();
+            }
+        }
+    }
+
 }

@@ -2,6 +2,17 @@
 var TestManager = (function() {
 	"use strict";
 
+	function getParameterByName(name) {
+	  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+	  var regexS = "[\\?&]" + name + "=([^&#]*)";
+	  var regex = new RegExp(regexS);
+	  var results = regex.exec(window.location.search);
+	  if(results == null)
+	    return "";
+	  else
+	    return decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+	
 	function xmlhttpPost(strURL, obj, callback) {
 	    var xmlHttpReq = false;
 	    // Mozilla/Safari
@@ -23,7 +34,6 @@ var TestManager = (function() {
 	    }
 	    xmlHttpReq.send(JSON.stringify(obj));
 	}
-
 	
 	function changeFavicon(src) {
 		var link = document.createElement('link'), oldLink = document

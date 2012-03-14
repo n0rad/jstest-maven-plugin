@@ -257,4 +257,8 @@ public abstract class JsTestConfiguration extends AbstractMojo {
         return testPortFindFree;
     }
 
+    public File getTestDir() {
+        return testDir;
+    }
+
 }

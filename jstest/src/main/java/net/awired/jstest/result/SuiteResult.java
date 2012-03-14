@@ -43,7 +43,7 @@ public class SuiteResult {
         if (skipped == null) {
             skipped = 0;
             for (TestResult result : tests) {
-                if (result.isSuccess()) {
+                if (result.isSkipped()) {
                     skipped++;
                 }
             }

@@ -10,7 +10,7 @@
 </head>
 <body>
 	<script type="text/javascript">
-		var require = curl; 
+		var require = curl;
 		var tests = $testsJsArray$;
 		require(tests, function() {
 			var testManager = new TestManager($debug$, $serverMode$, $browserId$, "$runId$", $emulator$);

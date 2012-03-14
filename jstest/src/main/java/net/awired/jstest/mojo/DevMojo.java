@@ -18,14 +18,15 @@ import org.apache.maven.plugin.MojoFailureException;
 public class DevMojo extends AbstractJsTestMojo {
 
     public static final String INSTRUCTION_FORMAT = "\n\n"
-            + "Server started--it's time to spec some JavaScript! You can run your specs as you develop by visiting this URL in a web browser: \n\n"
+            + "You can run your tests as you develop by visiting this URL in a web browser: \n\n"
             + "  http://localhost:%s"
             + "\n\n"
             + "The server will monitor these two directories for scripts that you add, remove, and change:\n\n"
             + "  source directory: %s\n\n"
-            + "  spec directory: %s"
+            + "  test directory: %s"
             + "\n\n"
-            + "Just leave this process running as you test-drive your code, refreshing your browser window to re-run your specs. You can kill the server with Ctrl-C when you're done.";
+            + "Leave this process running as you test-drive your code, refreshing your browser window to re-run tests.\n"
+            + "You can kill the server with Ctrl-C when you're done.";
 
     @Override
     public void run() throws MojoExecutionException, MojoFailureException {
@@ -38,7 +39,7 @@ public class DevMojo extends AbstractJsTestMojo {
             ResultHandler resultHandler = new ResultHandler(getLog(), null);
             jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), scriptResolver, buildAmdRunnerType(),
                     buildTestType(), true, getLog().isDebugEnabled()));
-            getLog().info(INSTRUCTION_FORMAT);
+            getLog().info(String.format(INSTRUCTION_FORMAT, getDevPort(), getSourceDir(), getTestDir()));
             jsTestServer.join();
         } catch (Exception e) {
             throw new RuntimeException("Cannot start Jstest server", e);
