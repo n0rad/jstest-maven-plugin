@@ -12,7 +12,7 @@
 <body>
 	<script type="text/javascript">
 		
-		var testManager = new TestManager($serverMode$);
+		var testManager = new TestManager($debug$, $serverMode$, $browserId$, "$runId$", $emulator$);
 		
 		if (window.addEventListener) {
 			addEventListener('DOMContentLoaded', testManager.run, false);

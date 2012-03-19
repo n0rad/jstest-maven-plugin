@@ -156,6 +156,10 @@ public abstract class JsTestConfiguration extends AbstractMojo {
 
     //////////////////////////////////////////////////////////
 
+    public boolean isIgnoreFailure() {
+        return mavenTestFailureIgnore;
+    }
+
     public boolean isSkipTests() {
         return skipTests || mavenTestSkip;
     }

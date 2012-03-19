@@ -9,7 +9,7 @@ import org.antlr.stringtemplate.StringTemplate;
 
 public class DefaultRunner extends Runner {
 
-    protected DefaultRunner() {
+    public DefaultRunner() {
         super(RunnerType.DEFAULT);
     }
 

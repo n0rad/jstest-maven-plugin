@@ -6,6 +6,7 @@ import net.awired.jstest.executor.RunnerExecutor;
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
 import net.awired.jstest.resource.ResourceDirectory;
 import net.awired.jstest.resource.ResourceResolver;
+import net.awired.jstest.result.RunResult;
 import net.awired.jstest.server.JsTestServer;
 import net.awired.jstest.server.handler.JsTestHandler;
 import net.awired.jstest.server.handler.ResultHandler;
@@ -19,6 +20,8 @@ import org.apache.maven.plugin.MojoFailureException;
  * @execute lifecycle="jstest-lifecycle" phase="process-test-resources"
  */
 public class TestMojo extends AbstractJsTestMojo {
+
+    private static final String ERROR_MSG = "There are test failures.\n\nPlease refer to %s for the individual test results.";
 
     @Override
     public void run() throws MojoExecutionException, MojoFailureException {
@@ -48,6 +51,16 @@ public class TestMojo extends AbstractJsTestMojo {
             if (!resultHandler.waitAllResult(10000, 1000)) {
                 throw new MojoFailureException("Do not receive all test results from clients");
             }
+
+            RunResult buildAggregatedResult = resultHandler.getRunResults().buildAggregatedResult();
+            if (buildAggregatedResult.findErrors() > 0 || buildAggregatedResult.findFailures() > 0) {
+                String message = String.format(ERROR_MSG, getPreparedReportDir());
+                if (isIgnoreFailure()) {
+                    getLog().error(message);
+                } else {
+                    throw new MojoFailureException(message);
+                }
+            }
         } catch (Exception e) {
             throw new MojoExecutionException("JsTest execution failure", e);
         } finally {
@@ -57,5 +70,4 @@ public class TestMojo extends AbstractJsTestMojo {
             jsTestServer.close();
         }
     }
-
 }

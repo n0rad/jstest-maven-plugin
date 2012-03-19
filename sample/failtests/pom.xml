@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>jstest-maven-plugin-sample-coverage</artifactId>
+	<artifactId>jstest-maven-plugin-sample-failtests</artifactId>
 	<packaging>war</packaging>
-	<name>JsTest Maven Plugin - Sample - Coverage</name>
+	<name>JsTest Maven Plugin - Sample - FailTests</name>
 
 	<parent>
 		<groupId>net.awired.jstest</groupId>
@@ -44,9 +44,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<coverage>true</coverage>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

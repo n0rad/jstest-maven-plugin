@@ -17,6 +17,7 @@
 		<module>coverage</module>
 		<module>overlay</module>
 		<module>curl</module>
+		<module>failtests</module>
 	</modules>
 
 	<dependencyManagement>

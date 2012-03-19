@@ -51,7 +51,6 @@
 					</execution>
 				</executions>
 				<configuration>
-					<serverPort>8235</serverPort>
 					<coverage>true</coverage>
 				</configuration>
 			</plugin>

@@ -18,7 +18,7 @@ public class TestResult {
     @XmlElement(name = "system-err")
     private String syserr;
     @XmlElement
-    private boolean skipped;
+    private Boolean skipped;
     @XmlElement
     private ErrorDescription error;
     @XmlElement
@@ -32,7 +32,7 @@ public class TestResult {
     }
 
     public boolean isSuccess() {
-        return !skipped && error == null && failure == null;
+        return !isSkipped() && error == null && failure == null;
     }
 
     public boolean isFailure() {
@@ -117,7 +117,7 @@ public class TestResult {
     }
 
     public boolean isSkipped() {
-        return skipped;
+        return skipped != null && skipped != false;
     }
 
     public void setSkipped(boolean skipped) {

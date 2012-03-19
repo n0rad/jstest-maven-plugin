@@ -2,10 +2,13 @@ package net.awired.jstest.result;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RunResults extends HashMap<Integer, RunResult> {
 
     private static final long serialVersionUID = 1L;
+
+    private RunResult aggregatedResult;
 
     public boolean isFullyFinished() {
         if (this.size() == 0) {
@@ -19,7 +22,32 @@ public class RunResults extends HashMap<Integer, RunResult> {
         return true;
     }
 
+    @Override
+    public RunResult remove(Object key) {
+        aggregatedResult = null;
+        return super.remove(key);
+    }
+
+    @Override
+    public void putAll(Map<? extends Integer, ? extends RunResult> m) {
+        aggregatedResult = null;
+        super.putAll(m);
+    }
+
+    @Override
+    public RunResult put(Integer key, RunResult value) {
+        aggregatedResult = null;
+        return super.put(key, value);
+    }
+
     public RunResult buildAggregatedResult() {
+        if (aggregatedResult == null) {
+            aggregatedResult = generateAggregatedResult();
+        }
+        return aggregatedResult;
+    }
+
+    private RunResult generateAggregatedResult() {
         RunResult res = new RunResult(-1);
         for (RunResult runResult : this.values()) {
             if (res.getCoverageResult() == null && runResult.getCoverageResult() != null) {
