@@ -69,14 +69,10 @@ public class OverlayExtractor {
     }
 
     private void copyDirectoryArtifact(File dir, File output) {
-        if (!dir.isDirectory()) {
-            log.warn("cannot copy overlay, its not a dir : " + dir);
-            return;
-        }
-
         // if overlay is in same reactor instead of point to war
         // we have a link to target/classes
-        File targetOfDependencyDir = new File(dir, "../jstest/src");
+
+        File targetOfDependencyDir = new File(dir.getParent(), "jstest/src");
         if (targetOfDependencyDir.isDirectory()) {
             try {
                 directoryCopier.copyDirectory(targetOfDependencyDir, output);
