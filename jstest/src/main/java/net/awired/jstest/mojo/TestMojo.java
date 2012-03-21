@@ -33,11 +33,11 @@ public class TestMojo extends AbstractJsTestMojo {
         JsTestServer jsTestServer = new JsTestServer(getLog(), getTestPort(), isTestPortFindFree());
         RunnerExecutor executor = null;
         try {
-            ResourceResolver scriptResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(false),
+            ResourceResolver resourceResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(false),
                     buildTestResourceDirectory(), buildOverlaysResourceDirectories(),
                     new ArrayList<ResourceDirectory>());
             ResultHandler resultHandler = new ResultHandler(getLog(), getPreparedReportDir());
-            jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), scriptResolver, buildAmdRunnerType(),
+            jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), resourceResolver, buildAmdRunnerType(),
                     buildTestType(), false, getLog().isDebugEnabled()));
 
             if (isEmulator()) {

@@ -58,7 +58,8 @@ public class ResourceResolver {
                 log.warn("Resource conflics for : " + found + ". Found in " + alreadyRegistered + " and in "
                         + fullPath);
             } else {
-                resources.put(prefix + found, fullPath);
+                String foundWithSlashes = found.replaceAll("\\\\", "/");
+                resources.put(prefix + foundWithSlashes, fullPath);
             }
         }
     }
