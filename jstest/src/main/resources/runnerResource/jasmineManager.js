@@ -75,6 +75,7 @@ var TestManager = (function() {
 		var buildTestResult = function(spec) {
 			var test = {};
 			test.name = spec.description;
+			test.classname = spec.testFile;
 			if (spec.results_.skipped) {
 				test.skipped = true;
 			}
@@ -167,7 +168,14 @@ var TestManager = (function() {
 				for (var i = 0; i < suite.specs_.length; i++) {
 					tests[i] = buildTestResult(suite.specs_[i]);
 				}
+				if (suite.parentSuite == null) {
+					var descSuiteSplit = suite.description.split(';', 2);
+					if (descSuiteSplit.length === 2) {
+						suite.description = descSuiteSplit[1];
+					}
+				}
 
+				
 				var suiteResult = {};
 				suiteResult.name = suite.description;
 				suiteResult.tests = tests;
@@ -177,6 +185,14 @@ var TestManager = (function() {
 			}
 			
 			ApiReport.prototype.reportSpecStarting = function(spec) {
+				var rootSuite = spec.suite;
+				while (rootSuite.parentSuite !== null) {
+					rootSuite = rootSuite.parentSuite;
+				}
+				var descSplit = rootSuite.description.split(';', 2);
+				if (descSplit.length === 2) {
+					spec.testFile = descSplit[0];
+				}
 				testStartTime = new Date().getTime();
 			}
 
