@@ -61,6 +61,8 @@ public class TestMojo extends AbstractJsTestMojo {
                     throw new MojoFailureException(message);
                 }
             }
+        } catch (MojoFailureException e) {
+            throw e;
         } catch (Exception e) {
             throw new MojoExecutionException("JsTest execution failure", e);
         } finally {
