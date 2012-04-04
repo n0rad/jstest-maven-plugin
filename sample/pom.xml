@@ -20,6 +20,11 @@
 		<module>failtests</module>
 	</modules>
 
+	<properties>
+		<sonar.language>js</sonar.language>
+		<sonar.dynamicAnalysis>true</sonar.dynamicAnalysis>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

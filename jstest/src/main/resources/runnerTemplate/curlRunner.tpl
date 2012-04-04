@@ -12,10 +12,18 @@
 	<script type="text/javascript">
 		var require = curl;
 		var tests = $testsJsArray$;
-		require(tests, function() {
-			var testManager = new TestManager($debug$, $serverMode$, $browserId$, "$runId$", $emulator$);
-			testManager.run();
-		});
+		
+		var testManager = new TestManager($debug$, $serverMode$, $browserId$, "$runId$", $emulator$);
+
+		var testFileLoaded = 0;
+		var loaded = function() {
+			testFileLoaded++;
+			if (testFileLoaded == tests.length) {
+				testManager.run();
+			}
+		};
+
+		require(tests);
 	</script>
 </body>
 </html>

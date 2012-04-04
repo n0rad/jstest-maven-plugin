@@ -11,6 +11,7 @@ import net.awired.jstest.common.io.FileUtilsWrapper;
 import net.awired.jstest.mojo.inherite.AbstractJsTestMojo;
 import net.awired.jstest.resource.ResourceDirectory;
 import net.awired.jstest.resource.ResourceDirectoryScanner;
+import net.awired.jstest.runner.RunnerType;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -46,9 +47,14 @@ public class ProcessTestSourcesMojo extends AbstractJsTestMojo {
         if (isCoverage()) {
             ResourceDirectory sourceScriptDirectory = buildSrcResourceDirectory();
             List<String> scan = scriptDirScanner.scan(sourceScriptDirectory);
+            RunnerType runnerType = buildAmdRunnerType();
             for (String file : scan) {
                 if (!file.toLowerCase().endsWith(".js")) {
                     getLog().debug("Skip instrumentation of file " + file + " as its not a .js file");
+                    continue;
+                }
+                if (runnerType.getAmdFile().equals(file)) {
+                    getLog().debug("Skip instrumentation of Amd file : " + file);
                     continue;
                 }
 
