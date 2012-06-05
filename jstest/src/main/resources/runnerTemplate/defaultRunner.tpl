@@ -5,9 +5,9 @@
 	<title>JsTest Runner</title>
     <script type="text/javascript" src="/runnerResource/jstest-common.js"></script>
 	
-	$sources$
-
 	$testResources$
+
+	$sources$
 
 	$tests$
 </head>
