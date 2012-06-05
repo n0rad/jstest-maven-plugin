@@ -32,13 +32,14 @@ public class DevMojo extends AbstractJsTestMojo {
     public void run() throws MojoExecutionException, MojoFailureException {
         JsTestServer jsTestServer = new JsTestServer(getLog(), getDevPort(), false);
         try {
-            ResourceResolver scriptResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(true),
+            ResourceResolver resourceResolver = new ResourceResolver(getLog(), buildCurrentSrcDir(true),
                     buildTestResourceDirectory(), buildOverlaysResourceDirectories(),
                     new ArrayList<ResourceDirectory>());
             //TODO remove resultHandler creation we dont need it here
             ResultHandler resultHandler = new ResultHandler(getLog(), null);
-            jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), scriptResolver, buildAmdRunnerType(),
-                    buildTestType(), true, getLog().isDebugEnabled(), getAmdPreloads()));
+            jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), resourceResolver,
+                    buildAmdRunnerType(), buildTestType(resourceResolver), true, getLog().isDebugEnabled(),
+                    getAmdPreloads()));
             getLog().info(String.format(INSTRUCTION_FORMAT, getDevPort(), getSourceDir(), getTestDir()));
             jsTestServer.join();
         } catch (Exception e) {

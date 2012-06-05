@@ -3,9 +3,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>JsTest Runner</title>
-	$testResources$
-
+    <script type="text/javascript" src="/runnerResource/jstest-common.js"></script>
+	
 	$sources$
+
+	$testResources$
 
 	$tests$
 </head>

@@ -2,62 +2,9 @@
 var TestManager = (function() {
 	"use strict";
 
-	function getParameterByName(name) {
-	  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-	  var regexS = "[\\?&]" + name + "=([^&#]*)";
-	  var regex = new RegExp(regexS);
-	  var results = regex.exec(window.location.search);
-	  if(results == null)
-	    return "";
-	  else
-	    return decodeURIComponent(results[1].replace(/\+/g, " "));
-	}
-	
-	function xmlhttpPost(strURL, obj, callback) {
-	    var xmlHttpReq = false;
-	    // Mozilla/Safari
-	    if (window.XMLHttpRequest) {
-	        xmlHttpReq = new XMLHttpRequest();
-	    }
-	    // IE
-	    else if (window.ActiveXObject) {
-	        xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
-	    }
-	    xmlHttpReq.open('POST', strURL, true);
-	    xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	    xmlHttpReq.onreadystatechange = function() {
-	        if (xmlHttpReq.readyState == 4) {
-	        	if (callback != undefined) {
-	        		callback(xmlHttpReq.responseText);
-	        	}
-	        }
-	    }
-	    xmlHttpReq.send(JSON.stringify(obj));
-	}
-	
-	function changeFavicon(src) {
-		var link = document.createElement('link'), oldLink = document
-				.getElementById('dynamic-favicon');
-		link.id = 'dynamic-favicon';
-		link.rel = 'shortcut icon';
-		link.href = src;
-		if (oldLink) {
-			document.head.removeChild(oldLink);
-		}
-		document.head.appendChild(link);
-	}
-
-
 	return function(debug, isServerMode, browserId, runId, emulator) {
 		var serverMode = isServerMode;
-		
-		var generateUrl = function(resource) {
-			var url = resource + '?browserId=' + browserId;
-			if (emulator) {
-				url += '&emulator=true';
-			}
-			return url;
-		}
+//		var myBrowserId = browserId;
 		
 		var buildFailureDesc = function(jasmineExpectResult) {
 			var failDesc = {};
@@ -125,7 +72,7 @@ var TestManager = (function() {
 				JSCOV.storeCurrentRunResult('jasmineRun');
 				runResult.coverageResult = JSCOV.getStoredRunResult()[0];
 				runResult.duration = new Date().getTime() - runStartTime;
-				xmlhttpPost(generateUrl('result/run'), runResult);
+				xmlhttpPost(generateUrl('result/run', browserId, emulator), runResult);
 				
 				setInterval(function() {
 					xmlhttpPost('runId', null, function(serverRunId) {
@@ -151,7 +98,7 @@ var TestManager = (function() {
 				} else if (spec.results_.failedCount) {
 					resultType = 'failure';
 				}
-				xmlhttpPost(generateUrl('result/test'), {name : spec.description,
+				xmlhttpPost(generateUrl('result/test', browserId, emulator), {name : spec.description,
 											resultType : resultType,
 											duration : duration});
 			}
@@ -180,7 +127,7 @@ var TestManager = (function() {
 				suiteResult.name = suite.description;
 				suiteResult.tests = tests;
 				suiteResult.duration = new Date().getTime() - suiteStartTime;
-				xmlhttpPost(generateUrl('result/suite'), suiteResult);
+				xmlhttpPost(generateUrl('result/suite', browserId, emulator), suiteResult);
 				suiteStartTime = new Date().getTime();
 			}
 			

@@ -18,6 +18,7 @@
 		<module>overlay</module>
 		<module>curl</module>
 		<module>failtests</module>
+		<module>qunit</module>
 	</modules>
 
 	<properties>

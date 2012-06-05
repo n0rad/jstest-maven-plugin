@@ -1,8 +1,9 @@
 package net.awired.jstest.runner;
 
 public enum TestType {
-    JASMINE("jasmineManager.js", "jasmine.js", "jasmine-html.js", "jasmine.css"),
-    //QUNIT
+    JASMINE("jasmineManager.js", "jasmine.js", "jasmine-html.js", "jasmine.css"), //
+    QUNIT("qunitManager.js", "qunit.js", "qunit.css"), //
+
     ;
 
     private String[] testerResources;

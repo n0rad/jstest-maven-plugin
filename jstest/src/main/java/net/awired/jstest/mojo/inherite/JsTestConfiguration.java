@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import net.awired.jstest.resource.ResourceDirectory;
+import net.awired.jstest.resource.ResourceResolver;
 import net.awired.jstest.runner.RunnerType;
 import net.awired.jstest.runner.TestType;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
 public abstract class JsTestConfiguration extends AbstractMojo {
@@ -91,7 +93,7 @@ public abstract class JsTestConfiguration extends AbstractMojo {
     /**
      * @parameter expression="${testType}"
      */
-    private TestType testType = TestType.JASMINE;
+    private TestType testType;
 
     /**
      * @parameter expression="${runnerTemplate}"
@@ -184,7 +186,19 @@ public abstract class JsTestConfiguration extends AbstractMojo {
         return this.runnerType;
     }
 
-    public TestType buildTestType() {
+    public TestType buildTestType(ResourceResolver resourceResolver) throws MojoExecutionException {
+        if (testType == null) {
+            for (TestType testType : TestType.values()) {
+                File resource = resourceResolver.getResource(ResourceResolver.SRC_RESOURCE_PREFIX
+                        + testType.getTesterResources()[0]);
+                if (resource != null) {
+                    this.testType = testType;
+                }
+            }
+        }
+        if (testType == null) {
+            throw new MojoExecutionException("Cannot found test type sources, for types " + TestType.values());
+        }
         return testType;
     }
 

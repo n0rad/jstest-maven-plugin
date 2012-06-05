@@ -38,7 +38,8 @@ public class TestMojo extends AbstractJsTestMojo {
                     new ArrayList<ResourceDirectory>());
             ResultHandler resultHandler = new ResultHandler(getLog(), getPreparedReportDir());
             jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), resourceResolver,
-                    buildAmdRunnerType(), buildTestType(), false, getLog().isDebugEnabled(), getAmdPreloads()));
+                    buildAmdRunnerType(), buildTestType(resourceResolver), false, getLog().isDebugEnabled(),
+                    getAmdPreloads()));
 
             if (isEmulator()) {
                 executor = new RunnerExecutor();
