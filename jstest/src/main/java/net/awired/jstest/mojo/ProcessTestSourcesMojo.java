@@ -53,7 +53,7 @@ public class ProcessTestSourcesMojo extends AbstractJsTestMojo {
                     getLog().debug("Skip instrumentation of file " + file + " as its not a .js file");
                     continue;
                 }
-                if (runnerType.getAmdFile().equals(file)) {
+                if (runnerType.getAmdFile() != null && runnerType.getAmdFile().equals(file)) {
                     getLog().debug("Skip instrumentation of Amd file : " + file);
                     continue;
                 }

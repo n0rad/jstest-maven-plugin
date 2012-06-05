@@ -21,9 +21,10 @@ public class CurlRunner extends Runner {
     }
 
     @Override
-    public void replaceTemplateVars(StringTemplate template) {
+    public void replaceTemplateVars(StringTemplate template) throws Exception {
         template.setAttribute("testResources", buildTestResources(resolver));
         template.setAttribute("testsJsArray", buildTestsJsArray());
+        template.setAttribute("amdPreload", mapper.writeValueAsString(amdPreloads));
     }
 
     private String buildTestResources(ResourceResolver resolver) {
@@ -48,12 +49,14 @@ public class CurlRunner extends Runner {
             Set<String> keySet = filterSourcesKeys.keySet();
 
             Function<String, String> jsSourceNameToAmdModuleName = new Function<String, String>() {
+                @Override
                 public String apply(String input) {
                     return input.substring(0, input.length() - 3);
                 }
             };
 
             Predicate<String> filterJsFiles = new Predicate<String>() {
+                @Override
                 public boolean apply(String input) {
                     return input.toLowerCase().endsWith(".js");
                 }

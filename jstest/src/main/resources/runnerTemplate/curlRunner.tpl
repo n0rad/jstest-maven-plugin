@@ -23,7 +23,9 @@
 			}
 		};
 
-		require(tests);
+		require($amdPreload$, function() {
+			require(tests);
+		});
 	</script>
 </body>
 </html>

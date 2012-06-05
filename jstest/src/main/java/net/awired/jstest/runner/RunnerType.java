@@ -1,5 +1,6 @@
 package net.awired.jstest.runner;
 
+import java.util.List;
 import net.awired.jstest.resource.ResourceResolver;
 import net.awired.jstest.runner.impl.CurlRunner;
 import net.awired.jstest.runner.impl.DefaultRunner;
@@ -43,13 +44,15 @@ public enum RunnerType {
         return template;
     }
 
-    public Runner buildRunner(TestType testType, ResourceResolver resolver, boolean serverMode, boolean debug) {
+    public Runner buildRunner(TestType testType, ResourceResolver resolver, boolean serverMode, boolean debug,
+            List<String> amdPreloads) {
         try {
             Runner runner = runnerClass.newInstance();
             runner.setTestType(testType);
             runner.setResolver(resolver);
             runner.setDebug(debug);
             runner.setServerMode(serverMode);
+            runner.setAmdPreloads(amdPreloads);
             return runner;
         } catch (Exception e) {
             throw new RuntimeException("Cannot instanciate runner", e);

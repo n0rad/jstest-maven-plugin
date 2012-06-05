@@ -2,11 +2,14 @@ package net.awired.jstest.runner;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import net.awired.jstest.resource.ResourceResolver;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.codehaus.jackson.map.ObjectMapper;
+import com.google.common.base.Preconditions;
 import com.google.common.io.CharStreams;
 
 public abstract class Runner {
@@ -18,12 +21,13 @@ public abstract class Runner {
     protected TestType testType;
     protected boolean serverMode;
     protected boolean debug;
+    protected List<String> amdPreloads = new ArrayList<String>();
 
     protected Runner(RunnerType runnerType) {
         this.runnerType = runnerType;
     }
 
-    abstract public void replaceTemplateVars(StringTemplate template);
+    abstract public void replaceTemplateVars(StringTemplate template) throws Exception;
 
     private void replaceCommonTemplateVars(StringTemplate template, int browserId, boolean emulator, UUID runId) {
         template.setAttribute("serverMode", serverMode ? "true" : "false");
@@ -33,7 +37,7 @@ public abstract class Runner {
         template.setAttribute("runId", runId);
     }
 
-    public String generate(int browserId, boolean emulator, UUID runId) {
+    public String generate(int browserId, boolean emulator, UUID runId) throws Exception {
         InputStream templateStream = getClass().getResourceAsStream(runnerType.getTemplate());
         if (templateStream == null) {
             throw new RuntimeException("Cannot found runner template : " + runnerType.getTemplate());
@@ -86,6 +90,16 @@ public abstract class Runner {
 
     public boolean isDebug() {
         return debug;
+    }
+
+    public List<String> getAmdPreloads() {
+        return amdPreloads;
+    }
+
+    public void setAmdPreloads(List<String> amdPreloads) {
+        Preconditions.checkNotNull(amdPreloads, "preload cannot be null");
+        this.amdPreloads = amdPreloads;
+
     }
 
 }

@@ -1,5 +1,7 @@
-define([ 'element_mover' ], function(ElementMover) {
+define(['curl/tdd/runner', 'require'], function (runner, require) {
+	runner(require).run(function(require) {
 
+require(['element_mover'], function(ElementMover) {
 	describe('the ElementMover object', function() {
 
 		var rootId = 'testContainer';
@@ -87,5 +89,9 @@ define([ 'element_mover' ], function(ElementMover) {
 		}
 
 	});
+	
+	
+});
 
+	}).then(loaded);
 });

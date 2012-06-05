@@ -38,7 +38,7 @@ public class DevMojo extends AbstractJsTestMojo {
             //TODO remove resultHandler creation we dont need it here
             ResultHandler resultHandler = new ResultHandler(getLog(), null);
             jsTestServer.startServer(new JsTestHandler(resultHandler, getLog(), scriptResolver, buildAmdRunnerType(),
-                    buildTestType(), true, getLog().isDebugEnabled()));
+                    buildTestType(), true, getLog().isDebugEnabled(), getAmdPreloads()));
             getLog().info(String.format(INSTRUCTION_FORMAT, getDevPort(), getSourceDir(), getTestDir()));
             jsTestServer.join();
         } catch (Exception e) {

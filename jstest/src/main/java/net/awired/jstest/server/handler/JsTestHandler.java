@@ -1,6 +1,7 @@
 package net.awired.jstest.server.handler;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class JsTestHandler extends AbstractHandler {
     private int browserId = 0;
 
     public JsTestHandler(ResultHandler result, Log log, ResourceResolver resolver, RunnerType runnerType,
-            TestType testType, boolean serverMode, boolean debug) {
+            TestType testType, boolean serverMode, boolean debug, List<String> amdPreloads) {
         this.log = log;
         this.resourceResolver = resolver;
         this.runnerType = runnerType;
@@ -37,9 +38,10 @@ public class JsTestHandler extends AbstractHandler {
         this.runnerHandler = new RunnerResourceHandler(log);
         this.resourceHandler = new ResourceHandler(log, resolver);
         this.resultHandler = result;
-        this.runnerGenerator = runnerType.buildRunner(testType, resolver, serverMode, debug);
+        this.runnerGenerator = runnerType.buildRunner(testType, resolver, serverMode, debug, amdPreloads);
     }
 
+    @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try {

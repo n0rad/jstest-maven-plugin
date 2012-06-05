@@ -10,6 +10,7 @@ import net.awired.jstest.resource.ResourceResolver;
 import org.apache.maven.plugin.logging.Log;
 import org.eclipse.jetty.server.Request;
 import com.google.common.io.ByteStreams;
+import com.google.common.io.Closeables;
 
 public class ResourceHandler {
 
@@ -40,7 +41,13 @@ public class ResourceHandler {
             response.setContentType(contentType + ";charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
             baseRequest.setHandled(true);
-            ByteStreams.copy(new FileInputStream(file), response.getOutputStream());
+            FileInputStream fileInputStream = null;
+            try {
+                fileInputStream = new FileInputStream(file);
+                ByteStreams.copy(fileInputStream, response.getOutputStream());
+            } finally {
+                Closeables.closeQuietly(fileInputStream);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package net.awired.jstest.mojo.inherite;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import net.awired.jstest.resource.ResourceDirectory;
 import net.awired.jstest.runner.RunnerType;
@@ -96,6 +97,11 @@ public abstract class JsTestConfiguration extends AbstractMojo {
      * @parameter expression="${runnerTemplate}"
      */
     private String runnerTemplate;
+
+    /**
+     * @parameter expression="${amdPreload}"
+     */
+    private List<String> amdPreloads = new ArrayList<String>();
 
     /**
      * @parameter expression="${runnerAmdFile}"
@@ -263,6 +269,10 @@ public abstract class JsTestConfiguration extends AbstractMojo {
 
     public File getTestDir() {
         return testDir;
+    }
+
+    public List<String> getAmdPreloads() {
+        return amdPreloads;
     }
 
 }
