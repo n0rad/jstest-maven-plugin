@@ -12,15 +12,7 @@ var TestManager = (function() {
 		QUnit.log(function(a) {
 		});
 
-		QUnit.testStart(function(a) {			
-//			var rootSuite = spec.suite;
-//			while (rootSuite.parentSuite !== null) {
-//				rootSuite = rootSuite.parentSuite;
-//			}
-//			var descSplit = rootSuite.description.split(';', 2);
-//			if (descSplit.length === 2) {
-//				spec.testFile = descSplit[0];
-//			}
+		QUnit.testStart(function(a) {
 			testStartTime = new Date().getTime();
 		});
 
@@ -29,7 +21,13 @@ var TestManager = (function() {
 			
 			var res = {};
 			res.name = test.name;
-			res.classname = "";
+			
+			if (test.module != undefined) {
+				var descSplit = test.module.split(';', 2);
+				if (descSplit.length === 2) {
+					res.classname = descSplit[0];
+				}
+			}
 			if (test.total == 0) {
 				res.skipped = true;
 			}
@@ -52,7 +50,12 @@ var TestManager = (function() {
 
 		QUnit.moduleDone(function(module) {
 			var suiteResult = {};
-			suiteResult.name = module.name;
+			var descSuiteSplit = module.name.split(';', 2);
+			if (descSuiteSplit.length === 2) {
+				suiteResult.name = descSuiteSplit[1];
+			} else {
+				suiteResult.name = module.name;				
+			}
 			suiteResult.tests = tests[module.name];
 			suiteResult.duration = new Date().getTime() - suiteStartTime;
 			xmlhttpPost(generateUrl('result/suite', browserId, emulator), suiteResult);

@@ -2,8 +2,9 @@ test( "hello test standalone", function() {
   ok( 1 == "1", "Passed!" );
 });
 
-module("module1");
+module("sampleTest.js;module1");
 test( "hello test1.0", function() {
+	var element = new ElementMover();
   ok( 1 == "1", "Passed!" );
 });
 
