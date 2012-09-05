@@ -18,6 +18,8 @@
 		<module>overlay</module>
 		<module>curl</module>
 		<module>qunit</module>
+		<module>qunit2</module>
+		<module>qunit-curl</module>
 		<module>failtests</module>
 	</modules>
 

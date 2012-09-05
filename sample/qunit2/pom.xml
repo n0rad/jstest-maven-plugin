@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>jstest-maven-plugin-sample-curl</artifactId>
+	<artifactId>jstest-maven-plugin-sample-qunit2</artifactId>
 	<packaging>war</packaging>
-	<name>JsTest Maven Plugin - Sample - Curl</name>
+	<name>JsTest Maven Plugin - Sample - Qunit</name>
 
 	<parent>
 		<groupId>net.awired.jstest</groupId>
@@ -14,35 +14,24 @@
 	</parent>
 
 	<properties>
+	   <sonar.javascript.testframework>jstest</sonar.javascript.testframework>
+	   
 		<sonar.language>js</sonar.language>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>net.awired.js</groupId>
-			<artifactId>curl</artifactId>
-			<version>0.6.3</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.js</groupId>
-			<artifactId>jasmine</artifactId>
-			<version>1.1.0</version>
-			<type>war</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.awired.js</groupId>
-			<artifactId>firebug-lite</artifactId>
-			<version>1.4</version>
+			<artifactId>qunit</artifactId>
+			<version>1.5.0</version>
 			<type>war</type>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/main/webapp</sourceDirectory>
-		<testSourceDirectory>src/test/webapp</testSourceDirectory>
+		<sourceDirectory>src/main/webapp/js</sourceDirectory>
+		<testSourceDirectory>src/test/webapp/js</testSourceDirectory>
 
 		<finalName>sample-app</finalName>
 		<plugins>
@@ -58,8 +47,6 @@
 					</execution>
 				</executions>
 				<configuration>
-					<runnerType>CURL</runnerType>
-					<serverPort>8234</serverPort>
 					<coverage>true</coverage>
 				</configuration>
 			</plugin>
