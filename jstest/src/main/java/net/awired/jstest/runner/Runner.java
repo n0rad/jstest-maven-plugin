@@ -17,7 +17,7 @@ public abstract class Runner {
     protected HtmlResourceTranformer htmlResourceTranformer = new HtmlResourceTranformer();
     protected ObjectMapper mapper = new ObjectMapper();
     protected ResourceResolver resolver;
-    protected final RunnerType runnerType;
+    protected RunnerType runnerType;
     protected TestType testType;
     protected boolean serverMode;
     protected boolean debug;

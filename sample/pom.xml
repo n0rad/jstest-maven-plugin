@@ -19,7 +19,9 @@
 		<module>curl</module>
 		<module>qunit</module>
 		<module>qunit2</module>
-		<module>qunit-curl</module>
+        <module>qunit-curl</module>
+        <module>qunit-require</module>
+        <module>qunit-almond</module>
 		<module>failtests</module>
 	</modules>
 

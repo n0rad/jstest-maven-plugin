@@ -1,0 +1,87 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>jstest-maven-plugin-sample-qunit-requirejs</artifactId>
+	<packaging>war</packaging>
+	<name>JsTest Maven Plugin - Sample - Qunit - RequireJS</name>
+
+	<parent>
+		<groupId>net.awired.jstest</groupId>
+		<artifactId>jstest-maven-plugin-sample</artifactId>
+		<version>0.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+	<properties>
+		<sonar.language>js</sonar.language>
+		<sonar.javascript.testframework>jstest</sonar.javascript.testframework>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.awired.js</groupId>
+			<artifactId>requirejs</artifactId>
+			<version>1.0.2</version>
+			<type>war</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.js</groupId>
+			<artifactId>jquery</artifactId>
+			<version>1.7.2</version>
+			<type>war</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.js</groupId>
+			<artifactId>qunit</artifactId>
+			<version>1.5.0</version>
+			<type>war</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.awired.js</groupId>
+			<artifactId>jquery-ui</artifactId>
+			<version>1.8.18</version>
+			<type>war</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src/main/js</sourceDirectory>
+		<testSourceDirectory>src/test/qunit/js</testSourceDirectory>
+
+		<finalName>sample-app</finalName>
+		<plugins>
+
+			<plugin>
+				<groupId>net.awired.jstest</groupId>
+				<artifactId>jstest-maven-plugin</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<runnerType>REQUIREJS</runnerType>
+					<coverage>true</coverage>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
